@@ -19,7 +19,7 @@
             
             <button class="btn btn-lg btn-primary btn-block" type="submit">Enviar</button>
 
-            <a href="https://Website de LSP.com.br">
+            <a href="/">
                 <p class="mt-5 mb-3 text-info">
                 &copy; 2021, Website de LSP <br>Website de LSP
                 </p>

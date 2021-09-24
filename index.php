@@ -6,8 +6,8 @@
     if( ! isset( $_GET['c'] ) ){
 
         require_once("controllers/MainController.php");
-        $MainCTRL = new MainController($ConfigSis);
-        $MainCTRL -> index();
+        $MainCTRL = new MainController($sisConfig);
+        $MainCTRL -> Index();
 
     }
     else
@@ -17,17 +17,17 @@
             case 'c':
                 
                 require_once("controllers/PerfisController.php");
-                $PerfilCTRL = new PerfisController($ConfigSis);
+                $PerfilCTRL = new PerfisController($sisConfig);
                 if( ! isset( $_GET['a'] ) ){
-                    $PerfilCTRL -> index();
+                    $PerfilCTRL -> Index();
                 }
                 else
                 {
                     switch( $_REQUEST['a'] ){
-                        case 'i': $PerfilCTRL -> inserePerfil(); break;
-                        case 'ia': $PerfilCTRL -> inserePerfilAction(); break;
-                        case 'u': $PerfilCTRL -> atualizaPerfil($_GET['id']); break;
-                        case 'ua': $PerfilCTRL -> atualizaPerfilAction(); break;
+                        case 'i': $PerfilCTRL -> InserePerfil(); break;
+                        case 'ia': $PerfilCTRL -> InserePerfilAction(); break;
+                        case 'u': $PerfilCTRL -> AtualizaPerfil($_GET['id']); break;
+                        case 'ua': $PerfilCTRL -> AtualizaPerfilAction(); break;
                     }
                 }
             break;
@@ -35,18 +35,18 @@
             case 'm':
             
                 require_once("controllers/MainController.php");
-                $MainCTRL = new MainController($ConfigSis);
+                $MainCTRL = new MainController($sisConfig);
                 
                 if( ! isset( $_GET['a'] ) ){
-                    $MainCTRL -> index();
+                    $MainCTRL -> Index();
                 }
                 else
                 {
                     switch( $_REQUEST['a'] ){
-                        case 'i': $MainCTRL -> index(); break;
-                        case 'l': $MainCTRL -> login(); break;
-                        case 'vna': $MainCTRL -> acessoNegado(); break;
-                        case 'sd': $MainCTRL -> destroySession(); break;
+                        case 'i': $MainCTRL -> Index(); break;
+                        case 'l': $MainCTRL -> Login(); break;
+                        case 'vna': $MainCTRL -> AcessoNegado(); break;
+                        case 'sd': $MainCTRL -> DestroySession(); break;
                     }
                 }
             break;
@@ -54,25 +54,25 @@
             case 'u':
         
                 require_once("controllers/UsuariosController.php");
-                $UsuarioCTRL = new UsuariosController($ConfigSis);
+                $UsuarioCTRL = new UsuariosController($sisConfig);
                 if( ! isset( $_GET['a'] ) ){
-                        $UsuarioCTRL -> index();
+                        $UsuarioCTRL -> Index();
                 }
                 else
                 {
                     switch( $_REQUEST['a'] ){
-                        case 'vl': $UsuarioCTRL -> validaLogin(); break;
-                        case 'fp': $UsuarioCTRL -> esqueceuSenha(); break;
-                        case 'fpa': $UsuarioCTRL -> esqueceuSenhaAction(); break;
-                        case 'cp': $UsuarioCTRL -> trocaDeSenha($_GET['id']); break;
-                        case 'vcp': $UsuarioCTRL -> validaTrocaDeSenha(); break;
-                        case 'r': $UsuarioCTRL -> reiniciaSenha($_GET['id']); break;
-                        case 'i': $UsuarioCTRL -> insereUsuario(); break;
-                        case 'ia': $UsuarioCTRL -> insereUsuarioAction(); break;
-                        case 'u': $UsuarioCTRL -> atualizaUsuario($_GET['id']); break;
-                        case 'ua': $UsuarioCTRL -> atualizaUsuarioAction(); break;
-                        case 'l': $UsuarioCTRL -> listaUsuarios(); break;
-                        case 'd': $UsuarioCTRL -> removeUsuario( $_GET['id'] ); break;
+                        case 'vl': $UsuarioCTRL -> ValidaLogin(); break;
+                        case 'u': $UsuarioCTRL -> AtualizaUsuario($_GET['id']); break;
+                        case 'ua': $UsuarioCTRL -> AtualizaUsuarioAction(); break;
+                        case 'cp': $UsuarioCTRL -> TrocaDeSenha($_GET['id']); break;
+                        case 'vcp': $UsuarioCTRL -> ValidaTrocaDeSenha(); break;
+                        case 'fp': $UsuarioCTRL -> EsqueceuSenha(); break;
+                        case 'fpa': $UsuarioCTRL -> EsqueceuSenhaAction(); break;
+                        case 'l': $UsuarioCTRL -> ListaUsuarios(); break;
+                        case 'i': $UsuarioCTRL -> InsereUsuario(); break;
+                        case 'ia': $UsuarioCTRL -> InsereUsuarioAction(); break;
+                        case 'r': $UsuarioCTRL -> ReiniciaSenha($_GET['id']); break;
+                        case 'd': $UsuarioCTRL -> RemoveUsuario( $_GET['id'] ); break;
                     }
                 }
             break;    

@@ -4,18 +4,32 @@
         <div class="col col-sm m-1 p-3">
             <b>
                 <?php 
-                    echo $this -> ConfigSis['tipos_de_cadastro'][ $cadastroPerfil['tipo_cadastro'] ];
+                    echo $this -> sisConfig['tipos_de_cadastro'][ $cadastroPerfil['tipo_cadastro'] ];
                 ?>
             </b>
             <h3>
                 <b>
-                    <?= strtoupper( $cadastroPerfil['nome_razaosocial'] ) ?>
+                    <?= strtoupper( $cadastroPerfil['nome_fantasia'] ) ?>
                 </b>
             </h3>
-            <a href="?c=c&a=u&id=<?=$cadastroPerfil['id_perfil']?>">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                Atualizar o perfil
-            </a>
+            <p>
+                <b>
+                    <?= strtoupper( $cadastroPerfil['nome_razaosocial']) ?>
+                </b>
+                <br>
+                CNPJ: <?= $cadastroPerfil['cnpj'] ?>
+                <br>
+                Endereço: <?= $cadastroPerfil['endereco'] ?>
+                <br>
+                Telefone: <?= $cadastroPerfil['telefone'] ?>
+                <br>
+                E-Mail: <?= $cadastroPerfil['email'] ?>
+                <br>
+                <a href="?c=c&a=u&id=<?=$cadastroPerfil['id_perfil']?>">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    Atualizar o perfil
+                </a>
+            </p>
         </div>
     </div>
 

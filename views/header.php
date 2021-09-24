@@ -3,13 +3,13 @@
     <head>
     
         <title>
-            <?php if($this -> ConfigSis['modo_de_trabalho']=='dev'){ ?>DEV<?php } ?>Website de LSP
+            <?php if($this -> sisConfig['modo_de_trabalho']=='dev'){ ?>DEV<?php } ?>Website de LSP
         </title>
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
         <meta name="description" content="Website de LSP">
-        <meta name="author" content=<?= $this -> ConfigSis['autoria'] ?>>
+        <meta name="author" content=<?= $this -> sisConfig['autoria'] ?>>
 		<meta name="robots" content="index,nofollow,noimageindex">
 		<meta name="robots" content="noarchive">
 		<meta name="googlebot" content="index,nofollow,noimageindex">
@@ -36,7 +36,7 @@
         
             <div class="text-white m-2 p-0">
                 <h4>
-                <?php if($this -> ConfigSis['modo_de_trabalho']=='dev'){?>
+                <?php if($this -> sisConfig['modo_de_trabalho']=='dev'){?>
                     <font color=#aa0000>
                         <b>
                             DEV
@@ -86,7 +86,7 @@
                             echo $_SESSION[ "usuarioNomeLogin" ];
                             echo '&nbsp;';
                             
-                            $imageFile =  $this -> ConfigSis['arquivos'] . "/usuarios/" . trim( $_SESSION['id_usuario'] ) . ".jpg";
+                            $imageFile =  $this -> sisConfig['arquivos'] . "/usuarios/" . trim( $_SESSION['id_usuario'] ) . ".jpg";
                             
                             echo('<img class="rounded-circle" style="max-height: 45px;" src="');
 
@@ -96,7 +96,7 @@
     
                             }else{
     
-                                $imageFile =  $this -> ConfigSis['arquivos'] . "/usuarios/";
+                                $imageFile =  $this -> sisConfig['arquivos'] . "/usuarios/";
                                 echo( $imageFile . 'usuarioPadrao.jpg' );                            
     
                             }

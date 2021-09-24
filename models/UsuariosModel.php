@@ -41,7 +41,7 @@ class usuariosModel{
 
     }
 
-    public function insereUsuario( $arrayUsuarios ){
+    public function InsereUsuario( $arrayUsuarios ){
 
         $sql = "INSERT INTO tb_usuario(login,email,senha,nivel,telefoneCelular,fk_id_perfil_usuario) 
         VALUE(
@@ -59,7 +59,7 @@ class usuariosModel{
 
     }
 
-    public function atualizaUsuario($arrayUsuarios){
+    public function AtualizaUsuario($arrayUsuarios){
 
         $sql = "UPDATE tb_usuario 
         SET 
@@ -84,7 +84,7 @@ class usuariosModel{
         
     }
 
-    public function consultaPerfil($perfilId){
+    public function ConsultaPerfil($perfilId){
 
         $sql = "SELECT * 
         FROM tb_perfil 
@@ -94,7 +94,7 @@ class usuariosModel{
 
     }
 
-    public function listaUsuarios($perfilId){
+    public function ListaUsuarios($perfilId){
         
         $sql = "SELECT * FROM tb_usuario 
                 WHERE fk_id_perfil_usuario = $perfilId
@@ -104,7 +104,7 @@ class usuariosModel{
 
     }
 
-    public function removeUsuario($usuarioId){
+    public function RemoveUsuario($usuarioId){
 
         $sql = "DELETE FROM tb_usuario 
                 WHERE id_usuario = $usuarioId ";
@@ -113,7 +113,7 @@ class usuariosModel{
 
     }
 
-    public function getConsult(){
+    public function ObtemConsulta(){
 
         return $this -> resultado;
 

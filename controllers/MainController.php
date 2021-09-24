@@ -2,81 +2,76 @@
 
     class MainController{
 
-        var $ConfigSis;
-
-        public function __construct( $ConfigSis ){
+        var $MainModel;
+        var $sisConfig;
+    
+        public function __construct( $sisConfig ){
         
             require_once("models/MainModel.php");
-            $this -> MainModel = new MainModel( $ConfigSis['banco_de_dados'] );
+            $this -> MainModel = new MainModel( $sisConfig['banco_de_dados'] );
             
-            $this -> ConfigSis = $ConfigSis;
+            $this -> sisConfig = $sisConfig;
 
         }
     
-        public function index(){
+        public function Index(){
 
             if( !isset($_SESSION["usuarioNomeLogin"]) ){
                 header("Location: index.php?c=m&a=l");exit;
             }
 
             if( $_SESSION['id_perfil'] > 0 ){
-                $this -> MainModel -> consultaPerfil( $_SESSION['id_perfil'] );
-                $result = $this -> MainModel -> getConsult();
+                $this -> MainModel -> ConsultaPerfil( $_SESSION['id_perfil'] );
+                $result = $this -> MainModel -> ObtemConsulta();
                 if( $result != false ){
                     $cadastroPerfil = $result -> fetch_assoc();
+                    require_once("views/header.php");
+                    require_once("views/home.php");
+                    require_once("views/footer.php");        
                 }else{
-                    echo("<script>alert('Houve algum problema na consulta do perfil do usuário!');</script>");
-                    exit;
+                    $this -> ReportaFalha('houve algum problema na consulta do perfil do usuário!');
                 }
+            }else{
+                $this -> ReportaFalha(null,null);
             }
 
+        }
+
+        public function Login(){
+
+            require_once("views/usuarios/LoginHeader.php");
+            require_once("views/usuarios/Login.php");
+
+        }
+
+        public function AcessoNegado(){
+            
+            $this -> ReportaFalha('acesso restrito a usuários específicos.','Acesso negado');
+
+        }
+
+        public function ReportaFalha( $cMensagemDeErro, $cTituloDoErro ){
+
             require_once("views/header.php");
-            require_once("views/home.php");
+            require_once("views/falha.php");
             require_once("views/footer.php");        
     
         }
-
-        public function login(){
-            require_once("views/usuarios/LoginHeader.php");
-            require_once("views/usuarios/Login.php");
-        }
-
-        public function acessoNegado(){
-
-            require_once("views/header.php");
-        ?>
-            
-            <center>
-            <div class="row-auto m-2 p-0 ">
-                <div class="col-sd-auto m-5 p-4 border shadow" style="background-color: #aa0000;">
-
-                    <h3 class="text-warning">
-                        <b>Acesso negado</b>
-                    </h3>
-                    <hr>
-
-                    <br><br>
-                    <p class="text-white">
-                        Acesso restrito a usuários específicos.
-                    </p>
-                    <br><br>
-
-                </div>
-            </div>
-            <a class="btn btn-primary" href="javascript:window.history.go(-1);">
-                Voltar
-            </a>
-            </center>
-            
-        <?php
-            require_once("views/footer.php");
-            exit;
-        }
+    
+        public function ReportaSucesso( $cMensagemDeSucesso, $cTituloDoSucesso, $cCaminhoDoBotaoSucesso ){
         
-        public function destroySession(){
+            require_once("views/header.php");
+            require_once("views/sucesso.php");
+            require_once("views/footer.php");        
+    
+        }
+                    
+        public function DestroySession(){
+
             $_SESSION = array();
             session_destroy();
             header("Location: index.php?c=m&a=l");exit;
+
         }
 
     }

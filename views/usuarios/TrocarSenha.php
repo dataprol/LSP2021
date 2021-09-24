@@ -9,6 +9,10 @@
     <form class="form-signin" action="?c=u&a=vcp" method="POST" name="formulario" id="formulario" 
     onsubmit="return Validar(this);" >
                 
+        <h2 class="h4 mb-3 font-weight-normal text-dark">
+            <b>Trabalho de LSP</b>
+        </h2>
+    
         <h1 class="h3 mb-3 font-weight-normal text-dark">
             <b><center>Troca de Senha</center></b>
         </h1>
@@ -27,12 +31,6 @@
         <button class="btn btn-lg btn-success btn-block" type="submit">Confirmar</button>
         <a class="btn btn-lg btn-danger btn-block" href="#" onclick="window.history.back();">
             Cancelar
-        </a>
-
-        <a href="https://Website de LSP.com.br">
-            <p class="mt-5 mb-3 text-info">
-            &copy; 2021, Website de LSP <br>Website de LSP
-            </p>
         </a>
 
     </form>

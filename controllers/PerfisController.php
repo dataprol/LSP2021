@@ -3,7 +3,7 @@
 class PerfisController{
     
     var $PerfilModel;
-    var $ConfigSis;
+    var $sisConfig;
     
     public function __construct($cfgsis){
         
@@ -16,16 +16,19 @@ class PerfisController{
         require_once("models/PerfisModel.php");
         $this -> PerfilModel = new PerfisModel($cfgsis['banco_de_dados']);
         
-        $this -> ConfigSis = $cfgsis;
+        $this -> sisConfig = $cfgsis;
 
     }
 
-    public function index(){
+    public function Index(){
+
         require_once("views/header.php");
+        require_once("views/home.php");
         require_once("views/footer.php");
+
     }
 
-    public function inserePerfil(){
+    public function InserePerfil(){
 
         require_once("views/header.php");
         require_once("views/Perfis/inserePerfil.php");
@@ -33,78 +36,97 @@ class PerfisController{
         
     }
 
-    public function inserePerfilAction(){
+    public function InserePerfilAction(){
         
         // Pega o índice do campo de tipo de cadastro
-        $_POST["perfilTipo"] = array_search( $_POST["perfilTipo"], $this -> ConfigSis['tipos_de_cadastro'] ); 
+        $_POST["perfilTipo"] = array_search( $_POST["perfilTipo"], $this -> sisConfig['tipos_de_cadastro'] ); 
         
         // Grava o novo pefil
-        $this -> PerfilModel -> inserePerfil($_POST);
+        $this -> PerfilModel -> InserePerfil( $_POST );
         
         // Pega o Id do novo perfil, para armazenar na tabela de usuário
-        $result = $this -> PerfilModel -> getConsult();
+        $result = $this -> PerfilModel -> ObtemConsulta();
         if( $result != false ){
             
+            // Sucesso!
             $arrayUsuarios['perfilId'] = $result;
             $arrayUsuarios['usuarioNivel'] = 99;
             $arrayUsuarios['usuarioLogin'] = $_POST['usuarioLogin'];
-            $arrayUsuarios['usuarioSenha'] = $_POST['usuarioSenha'];
+            $arrayUsuarios['usuarioSenha'] = md5( $_POST['usuarioSenha'] );
             $arrayUsuarios['usuarioEmail'] = $_POST['perfilEmail'];
             $arrayUsuarios['usuarioTelefoneCelular'] = $_POST['perfilTelefone'];
     
             // Cadastra o usuário
-            $this -> PerfilModel -> insereUsuario($arrayUsuarios);
-            $result = $this -> PerfilModel -> getConsult();
+            $this -> PerfilModel -> InsereUsuario($arrayUsuarios);
+            $result = $this -> PerfilModel -> ObtemConsulta();
             if( $result != false ){
 
+                // Sucesso!
                 $usuarioId = $result;
-                header("Location: index.php?c=m&a=i");
+                $this -> ReportaSucesso('seu cadastro foi concluído com sucesso!','?c=m&a=i');
 
             }else{
-                echo("<script>alert('Falha na gravação do usuário do novo perfil!');</script>");
+                $this -> ReportaFalha('houve uma falha na tentativa de gravação do usuário para seu perfil!');
             }
 
         }else{
-            echo("<script>alert('Falha na gravação do novo perfil!');</script>");
+            $this -> ReportaFalha('houve uma falha na tentativa de gravação de seu perfil!');
         }
+
 
     }
 
-    public function atualizaPerfil( $id_perfil ){
+    public function AtualizaPerfil( $id_perfil ){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
         }
 
-        $this -> PerfilModel -> consultaPerfil( $id_perfil );
-        $result = $this -> PerfilModel -> getConsult();
+        $this -> PerfilModel -> ConsultaPerfil( $id_perfil );
+        $result = $this -> PerfilModel -> ObtemConsulta();
 
         if( $arrayPerfil = $result -> fetch_assoc() ){
             require_once("views/header.php");
             require_once("views/perfis/AlteraPerfil.php");
             require_once("views/footer.php");
+        }else{
+            $this -> ReportaFalha(null,null);
         }
 
     }
 
-    public function atualizaPerfilAction(){
+    public function AtualizaPerfilAction(){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
         }
 
         // Pega o índice do campo de tipo de cadastro
-        $_POST["perfilTipo"] = array_search( $_POST["perfilTipo"], $this -> ConfigSis['tipos_de_cadastro'] ); 
+        $_POST["perfilTipo"] = array_search( $_POST["perfilTipo"], $this -> sisConfig['tipos_de_cadastro'] ); 
 
-        $this -> PerfilModel -> atualizaPerfil($_POST);
-        if( $this -> PerfilModel -> getConsult() != false ){
-        
+        $this -> PerfilModel -> AtualizaPerfil($_POST);
+        if( $this -> PerfilModel -> ObtemConsulta() != false ){            
+            $this -> ReportaSucesso("perfil atualizado, com sucesso!",null,"?c=m&a=i");
         }else{
-            echo("<script>alert('Falha na atualização de seu perfil!');</script>");
-        }
+            $this -> ReportaFalha('houve uma falha na tentativa de atualização de seu perfil!');
+        }        
         
-        header("Location: index.php?c=m&a=i");
+    }
+
+    public function ReportaFalha( $cMensagemDeErro, $cTituloDoErro ){
+
+        require_once("views/header.php");
+        require_once("views/falha.php");
+        require_once("views/footer.php");        
+
+    }
+
+    public function ReportaSucesso( $cMensagemDeSucesso, $cTituloDoSucesso, $cCaminhoDoBotaoSucesso ){
         
+        require_once("views/header.php");
+        require_once("views/sucesso.php");
+        require_once("views/footer.php");        
+
     }
 
 }

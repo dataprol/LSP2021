@@ -23,7 +23,7 @@
             <select class="form-control" name="perfilTipo" id="perfilTipo" required>
             <option value=""></option>
             <?php
-                foreach ( $this -> ConfigSis['tipos_de_cadastro'] as $tipo ) {
+                foreach ( $this -> sisConfig['tipos_de_cadastro'] as $tipo ) {
                     echo "<option value=$tipo>$tipo</option>";
                 }
             ?>

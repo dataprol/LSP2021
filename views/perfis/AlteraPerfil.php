@@ -35,7 +35,7 @@
                 <option value=""></option>
                 <?php
                 $Indice=0;
-                foreach ( $this -> ConfigSis['tipos_de_cadastro'] as $tipo ) {
+                foreach ( $this -> sisConfig['tipos_de_cadastro'] as $tipo ) {
                     echo "<option value=$tipo";
                     if($Indice==$arrayPerfil['tipo_cadastro']){
                         echo " selected ";

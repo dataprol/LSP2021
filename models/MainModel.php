@@ -13,7 +13,7 @@ class MainModel{
 
     }
 
-    public function consultaPerfil( $clienteId ){
+    public function ConsultaPerfil( $clienteId ){
 
         $sql = "SELECT * 
         FROM tb_perfil 
@@ -23,7 +23,7 @@ class MainModel{
     
     }
 
-    public function getConsult(){
+    public function ObtemConsulta(){
         return $this -> resultado;
     }
 

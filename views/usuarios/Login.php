@@ -43,7 +43,7 @@
             <a href="?c=c&a=i">Não tem cadastro? Clique aqui.</a>
             </p>
 
-            <a href="https://Website de LSP.com.br">
+            <a href="/">
                 <p class="mt-5 mb-3 text-info">
                 &copy; 2021, Website de LSP
                 </p>

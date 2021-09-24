@@ -3,31 +3,31 @@
 class UsuariosController{
         
     var $UsuarioModel;
-    var $ConfigSis;
+    var $sisConfig;
 
     public function __construct($cfgsis){
 
         require_once("models/UsuariosModel.php");
         $this -> UsuarioModel = new UsuariosModel($cfgsis['banco_de_dados']);    
 
-        $this -> ConfigSis = $cfgsis;
+        $this -> sisConfig = $cfgsis;
 
     }
 
-    public function validaLogin(){
+    public function ValidaLogin(){
            
         $login = trim( strtolower( $_POST["usuarioNomeLogin"] ) );
         $password = md5(trim($_POST[ "senha" ]));
         $this -> UsuarioModel -> consultaUsuarioLogin( $login );
-        $result = $this -> UsuarioModel -> getConsult();
+        $result = $this -> UsuarioModel -> ObtemConsulta();
 
         if( $result != false 
         and $result -> num_rows > 0 
         and $linhausuario = $result -> fetch_assoc() 
         and ($linhausuario[ 'senha' ] == $password or empty($linhausuario['senha'])) ){
 
-            $this -> UsuarioModel -> consultaPerfil($linhausuario['fk_id_perfil_usuario']);
-            $result = $this -> UsuarioModel -> getConsult();
+            $this -> UsuarioModel -> ConsultaPerfil($linhausuario['fk_id_perfil_usuario']);
+            $result = $this -> UsuarioModel -> ObtemConsulta();
 
             $_SESSION['tipo_cadastro'] = 0;
             if( $result != false and $linhaPerfil = $result -> fetch_assoc() ){
@@ -51,6 +51,7 @@ class UsuariosController{
             }
 
             header("Location: index.php?c=m&a=i");
+            exit;
             
         }else{
 
@@ -62,14 +63,14 @@ class UsuariosController{
 
     }
 
-    public function trocaDeSenha( $id ){
+    public function TrocaDeSenha( $id ){
                 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
         }
 
         $this -> UsuarioModel -> consultaUsuarioId( $id );
-        $aUsuario = $this -> UsuarioModel -> getConsult() -> fetch_assoc();
+        $aUsuario = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
 
         
         require_once("views/usuarios/LoginHeader.php");
@@ -77,40 +78,46 @@ class UsuariosController{
         
     }
 
-    public function validaTrocaDeSenha(){
+    public function ValidaTrocaDeSenha(){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
         }
 
-        $arrayUsuarios["id_usuario"]    = $_POST["id_usuario"];
-        $arrayUsuarios["senha"]         = md5( $_POST["senhaNovaUsuario"] );
+        $arrayUsuarios["id_usuario"] = $_POST["id_usuario"];
+        $arrayUsuarios["senha"] = md5( $_POST["senhaNovaUsuario"] );
         
-        if( $_POST["senha"] != $arrayUsuarios["senha"] ){
+        $this -> UsuarioModel -> consultaUsuarioId( $arrayUsuarios["id_usuario"] );
+        $aUsuario = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
+        
+        if( $aUsuario['senha'] != $arrayUsuarios["senha"] ){
 
             if( ! isset( $_SESSION[ "usuarioErroEsperar" ] ) ){
                 $_SESSION['usuarioErroEsperar'] = .1;
             }
 
             $this -> UsuarioModel -> atualizaSenhaUsuario($arrayUsuarios);
-            if( $this -> UsuarioModel -> getConsult() ){
+            if( $this -> UsuarioModel -> ObtemConsulta() ){
 
-                echo('<script>alert("Senha alterada, com sucesso!");</script>');
-                header("Location: ?c=m&a=sd");
+                $this -> ReportaSucesso('sua senha foi alterada, com sucesso!',null,'?c=m&a=sd');
             
             }else{
+
                 $_SESSION['usuarioSituacao'] = "erro";
                 sleep($_SESSION['usuarioErroEsperar']);
-                require_once("views/falha.php");
+                $this -> ReportaFalha('houve algum problema na tentativa de alterar senha do usuário!');
+
             }
+
         }else{
-            echo('<script>alert("A nova senha precisa ser diferente da antiga!");</script>');
-            $this -> trocaDeSenha( $arrayUsuarios["id_usuario"] );
+
+            $this -> ReportaFalha('a nova senha precisa ser diferente da antiga!', 'Inconsistência');
+
         }
 
     }
 
-    public function reiniciaSenha( $id ){
+    public function ReiniciaSenha( $id ){
                 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
@@ -119,10 +126,10 @@ class UsuariosController{
         negarAcesso(0);
         
         $this -> UsuarioModel -> consultaUsuarioId( $id );
-        $arrayUsuarios = $this -> UsuarioModel -> getConsult() -> fetch_assoc();
+        $arrayUsuarios = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
         if( !empty( $arrayUsuarios ) ){
 
-            $this -> reiniciaSenhaAction( $arrayUsuarios );
+            $this -> ReiniciaSenhaAction( $arrayUsuarios );
 
         }else{
             
@@ -130,13 +137,13 @@ class UsuariosController{
 
         }
 
-        $this -> listaUsuarios();
+        $this -> ListaUsuarios();
 
     }
 
-    public function reiniciaSenhaAction( $arrayUsuarios ){
+    public function ReiniciaSenhaAction( $arrayUsuarios ){
         
-        $novaSenha = $this -> gerar_senha( 6, true, true, true, true );
+        $novaSenha = $this -> GeraSenha( 8, true, true, true, true );
         $prazoDias = 1;
         $validadeSenha = new DateTime();
         $prazoSenha = new DateInterval( "P" . $prazoDias . "D" );
@@ -146,57 +153,57 @@ class UsuariosController{
         $arrayUsuarios["senhaValidade"] = $validadeSenha -> format( "Y-m-d" );
         
         $this -> UsuarioModel -> atualizaSenhaUsuario( $arrayUsuarios );
-        if( $this -> UsuarioModel -> getConsult() ){
+        if( $this -> UsuarioModel -> ObtemConsulta() ){
             
             // Para fins de teses, a nova senha aparece na tela 
-            echo "<script>alert('A nova senha será: $novaSenha');</script>";
-
+            // Quando possível, codificar para ser enviada por e-mail
+            $this -> ReportaSucesso( "sua nova senha é temporária e será:<br><br>
+            <b>$novaSenha</b><br><br>
+            Ela tem um prazo de 24h. Depois, ela será desativada.<br>
+            Troque-a, o quanto antes.", "Reinicio de Senha", "?c=m&a=sd" );
+            /* echo "<script>alert('Se tiver informado seu e-mail, corretamente, 
+                    e o mesmo estiver cadastrado, dentro de 5 minutos, 
+                    você receberá uma mensagem contendo instruções.');</script>"; */
             return $novaSenha;
 
         }else{
 
-            require_once("views/falha.php");
-            exit;
+            $this -> ReportaFalha(null,null);
 
         }
 
     }
 
-    public function esqueceuSenha(){
+    public function EsqueceuSenha(){
 
         require_once("views/usuarios/LoginHeader.php");
         require_once("views/usuarios/RecuperaSenha.php");
 
     }
 
-    public function esqueceuSenhaAction(){
+    public function EsqueceuSenhaAction(){
         
         $this -> UsuarioModel -> consultaUsuarioEmail( $_POST['email'] );
-        $arrayUsuarios = $this -> UsuarioModel -> getConsult() -> fetch_assoc();
+        $arrayUsuarios = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
         if( !empty( $arrayUsuarios ) ){
 
-            $novaSenha = $this -> reiniciaSenhaAction( $arrayUsuarios );
+            $novaSenha = $this -> ReiniciaSenhaAction( $arrayUsuarios );
             
-            // Para fins de teses, a nova senha aparece na tela 
-            echo "<script>alert('Sua nova senha é: $novaSenha');</script>";
-    
-            /* echo "<script>alert('Se tiver informado seu e-mail, corretamente, 
-                    e o mesmo estiver cadastrado, dentro de 5 minutos, 
-                    você receberá uma mensagem.');</script>"; */
-                    
-        }
+        }else{
 
-        header("Location: index.php?c=m&a=l");exit;
+            $this -> ReportaFalha(null,null);
+            
+        }
 
     }
 
-    public function index(){       
+    public function Index(){       
 
-        $this->listaUsuarios();
+        $this->ListaUsuarios();
         
     }
 
-    public function insereUsuario(){
+    public function InsereUsuario(){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
@@ -210,7 +217,7 @@ class UsuariosController{
 
     }
 
-    public function insereUsuarioAction(){
+    public function InsereUsuarioAction(){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) and !isset($_SESSION["id_perfil"]) ){
             header("Location: index.php?c=m&a=l");exit;
@@ -218,20 +225,20 @@ class UsuariosController{
 
         // Confere se login já está em uso
         $this -> UsuarioModel -> consultaUsuarioLogin( $_POST["usuarioLogin"] );
-        $arrayUsuarios = $this -> UsuarioModel -> getConsult() -> fetch_assoc();
+        $arrayUsuarios = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
         if( !empty( $arrayUsuarios ) ){
 
-            echo '<script>alert("já existe usuário com este nome de usuário informado");window.history.back();</script>';
+            $this -> ReportaFalha("já existe usuário com o mesmo nome de usuário informado","Inconsistência");
             exit;
 
         }
 
         // Confere se e-mail já está em uso
         $this -> UsuarioModel -> consultaUsuarioEmail( $_POST["usuarioEmail"] );
-        $arrayUsuarios = $this -> UsuarioModel -> getConsult() -> fetch_assoc();
+        $arrayUsuarios = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
         if( !empty( $arrayUsuarios ) ){
 
-            echo '<script>alert("já existe usuário com este e-mail informado");window.history.back();</script>';
+            $this -> ReportaFalha("já existe usuário com o mesmo e-mail informado","Inconsistência");
             exit;
 
         }
@@ -243,25 +250,23 @@ class UsuariosController{
         $arrayUsuarios["usuarioSenha"] = md5( $_POST["usuarioSenha"] );
         $arrayUsuarios["perfilId"] = $_POST["perfilId"];
  
-        $this -> UsuarioModel -> insereUsuario( $arrayUsuarios );
+        $this -> UsuarioModel -> InsereUsuario( $arrayUsuarios );
         
-        $idUsuario = $this -> UsuarioModel -> getConsult();
+        $idUsuario = $this -> UsuarioModel -> ObtemConsulta();
         
         if( $idUsuario > 0 ){
-                    
+
+            $this -> ReportaSucesso( "usuário cadastrado, com sucesso!", null, "?c=u&a=l" );
+
         }else{
 
-            require_once("views/falha.php");
-            exit;
-            return;
+            $this -> ReportaFalha(null,null);
 
         }
 
-        $this -> listaUsuarios();
-
     }
 
-    public function atualizaUsuario( $id_usuario ){
+    public function AtualizaUsuario( $id_usuario ){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
@@ -270,7 +275,7 @@ class UsuariosController{
         negarAcesso(0);
         
         $this -> UsuarioModel -> consultaUsuarioId( $id_usuario );
-        $result = $this -> UsuarioModel -> getConsult();
+        $result = $this -> UsuarioModel -> ObtemConsulta();
 
         if( $arrayUsuarios = $result -> fetch_assoc() ){
             require_once("views/header.php");
@@ -280,7 +285,7 @@ class UsuariosController{
         
     }
 
-    public function atualizaUsuarioAction(){
+    public function AtualizaUsuarioAction(){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
@@ -292,24 +297,24 @@ class UsuariosController{
         $arrayUsuarios["usuarioEmail"] = $_POST["usuarioEmail"];
         $arrayUsuarios["usuarioPerfilId"] = $_POST["usuarioPerfilId"];
         
-        $this -> UsuarioModel -> atualizaUsuario($arrayUsuarios);
-        if( $this -> UsuarioModel -> getConsult() != false ){
-        
-        }
-        
-        $this -> index();
+        $this -> UsuarioModel -> AtualizaUsuario($arrayUsuarios);
+        if( $this -> UsuarioModel -> ObtemConsulta() != false ){
+            $this -> ReportaSucesso('seu usuário de acesso foi atualizado, com sucesso!',null,'?c=u&a=l');
+        }else{
+            $this -> ReportaFalha('houve algum problema na tentativa de atualizar seu usuário de acesso!');
+        }        
 
     }
 
-    public function listaUsuarios(){
+    public function ListaUsuarios(){
         
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
         }
 
-        $this -> UsuarioModel -> listaUsuarios($_SESSION["id_perfil"]);
+        $this -> UsuarioModel -> ListaUsuarios($_SESSION["id_perfil"]);
 
-        $result = $this -> UsuarioModel -> getConsult();
+        $result = $this -> UsuarioModel -> ObtemConsulta();
         
         $arrayUsuarios = array();
         while( $linha = $result -> fetch_assoc() ) {
@@ -322,7 +327,7 @@ class UsuariosController{
         
     }      
   
-    public function removeUsuario( $usuarioId ){
+    public function RemoveUsuario( $usuarioId ){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
@@ -330,14 +335,64 @@ class UsuariosController{
 
         negarAcesso(9);
         
-        $this -> UsuarioModel -> removeUsuario($usuarioId);
-        if( $this -> UsuarioModel -> getConsult() != false ){
-
+        $this -> UsuarioModel -> RemoveUsuario($usuarioId);
+        if( $this -> UsuarioModel -> ObtemConsulta() != false ){
+            $this -> ReportaSucesso("usuário removido, com sucesso!",null,"?c=u&a=l");
+        }else{
+            $this -> ReportaFalha(null,null);
         }
-        
-        $this -> index();
 
     }
+
+    public function ReportaFalha( $cMensagemDeErro, $cTituloDoErro ){
+
+        require_once("views/header.php");
+        require_once("views/falha.php");
+        require_once("views/footer.php");        
+
+    }
+
+    public function ReportaSucesso( $cMensagemDeSucesso, $cTituloDoSucesso, $cCaminhoDoBotaoSucesso ){
+        
+        require_once("views/header.php");
+        require_once("views/sucesso.php");
+        require_once("views/footer.php");        
+
+    }
+
+    // Exemplo retirado do website DevMedia
+    function GeraSenha( $tamanho, $maiusculas, $minusculas, $numeros, $simbolos ){
+
+        $senha = '';
+        $ma = "ABCDEFGHJKLMNPQRSTUVYXWZ"; // $ma contem as letras maiúsculas
+        $mi = mb_strtolower($ma); // $mi contem as letras minusculas
+        $nu = "123456789"; // $nu contem os números
+        $si = "#$%&*"; // $si contem os símbolos
+       
+        if ($maiusculas){
+              // se $maiusculas for "true", a variável $ma é embaralhada e adicionada para a variável $senha
+              $senha .= str_shuffle($ma);
+        }
+       
+        if ($minusculas){
+            // se $minusculas for "true", a variável $mi é embaralhada e adicionada para a variável $senha
+            $senha .= str_shuffle($mi);
+        }
+    
+        if ($numeros){
+            // se $numeros for "true", a variável $nu é embaralhada e adicionada para a variável $senha
+            $senha .= str_shuffle($nu);
+        }
+    
+        if ($simbolos){
+            // se $simbolos for "true", a variável $si é embaralhada e adicionada para a variável $senha
+            $senha .= str_shuffle($si);
+        }
+    
+        // retorna a senha embaralhada com "str_shuffle" com o tamanho definido pela variável $tamanho
+        return mb_substr( str_shuffle( $senha ), 0, $tamanho );
+
+      }
 
 }
 

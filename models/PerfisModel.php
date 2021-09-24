@@ -13,7 +13,7 @@ class PerfisModel{
 
     }
 
-    public function consultaPerfil($perfilId){
+    public function ConsultaPerfil($perfilId){
 
         $sql = "SELECT 
         `cnpj`,
@@ -30,7 +30,7 @@ class PerfisModel{
 
     }
 
-    public function inserePerfil($arrayPerfil){
+    public function InserePerfil($arrayPerfil){
 
         $sql = "INSERT INTO `tb_perfil`
         (
@@ -40,7 +40,8 @@ class PerfisModel{
         `nome_fantasia`,
         `email`,
         `telefone`,
-        `endereco`)
+        `endereco`
+        )
         VALUE(
         '" . $arrayPerfil['perfilCNPJ'] . "', 
         "  . $arrayPerfil['perfilTipo'] . ", 
@@ -48,8 +49,8 @@ class PerfisModel{
         '" . $arrayPerfil['perfilNome'] . "', 
         '" . $arrayPerfil['perfilEmail'] . "', 
         '" . $arrayPerfil['perfilTelefone'] . "', 
-        '" . $arrayPerfil['perfilEndereco'] . "');
-        ";
+        '" . $arrayPerfil['perfilEndereco'] . "'
+        );";
 
         $this -> Conn -> query($sql);
         
@@ -57,17 +58,25 @@ class PerfisModel{
 
     }
 
-    public function insereUsuario( $arrayUsuarios ){
+    public function InsereUsuario( $arrayUsuarios ){
 
-        $sql = "INSERT INTO tb_usuario(login,email,senha,nivel,perfilTelefoneCelular,fk_id_perfil_usuario) 
+        $sql = "INSERT INTO tb_usuario
+        (
+        login,
+        email,
+        senha,
+        nivel,
+        telefoneCelular,
+        fk_id_perfil_usuario
+        ) 
         VALUE(
         '" . $arrayUsuarios['usuarioLogin'] . "', 
         '" . $arrayUsuarios['usuarioEmail'] . "', 
         '" . $arrayUsuarios['usuarioSenha'] . "', 
         "  . $arrayUsuarios['usuarioNivel'] . ", 
         '" . $arrayUsuarios['usuarioTelefoneCelular'] . "', 
-        "  . $arrayUsuarios['perfilId'] . ");
-        ";
+        "  . $arrayUsuarios['perfilId'] . "
+        );";
 
         $this -> Conn -> query($sql);
 
@@ -75,7 +84,7 @@ class PerfisModel{
 
     }
 
-    public function atualizaPerfil($arrayPerfil){
+    public function AtualizaPerfil($arrayPerfil){
         
         $sql = "UPDATE `tb_perfil`
         SET
@@ -93,7 +102,7 @@ class PerfisModel{
 
     }
 
-    public function getConsult(){
+    public function ObtemConsulta(){
         return $this -> resultado;
     }
 
