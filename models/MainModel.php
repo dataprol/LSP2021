@@ -23,6 +23,21 @@ class MainModel{
     
     }
 
+    public function ListaPedidos($perfilId){
+        
+        $where = "";        
+        if( $perfilId != null ){
+            $where = "WHERE fk_id_perfil_pedido = $perfilId";
+        }
+
+        $sql = "SELECT * FROM tb_pedido 
+                $where
+                LIMIT 50";
+                //ORDER BY usuarioNome LIMIT 25";
+
+        $this -> resultado = $this -> Conn -> query( $sql );
+
+    }
     public function ObtemConsulta(){
         return $this -> resultado;
     }

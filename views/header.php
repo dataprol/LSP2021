@@ -73,6 +73,18 @@
                                     <a class="dropdown-item" href="?c=u&a=i">Adicionar</a>
                                 </div>
                             </div>                            
+                        <?php 
+                        }
+                        if( verificaNivelAcesso(5) ){ ?>
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsuarios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pedidos
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownUsuarios">
+                                    <a class="dropdown-item" href="?c=p&a=l">Listar</a>
+                                    <a class="dropdown-item" href="?c=p&a=i">Adicionar</a>
+                                </div>
+                            </div>                            
                         <?php } ?>
                         
                     </div>
@@ -108,7 +120,7 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPerfil">
                             <a class="dropdown-item" href="?c=u&a=cp&id=<?=$_SESSION['id_usuario']?>">Trocar senha</a>
                             <a class="dropdown-item" href="?c=u&a=u&id=<?=$_SESSION['id_usuario']?>">Atualizar cadastro</a>
-                            <a class="dropdown-item" href=".">Perfil</a>
+                            <a class="dropdown-item" href="?c=c&a=u&id=<?=$cadastroPerfil['id_perfil']?>">Perfil</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="?c=m&a=sd">Sair</a>
                         </div>

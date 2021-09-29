@@ -31,7 +31,7 @@ class PerfisController{
     public function InserePerfil(){
 
         require_once("views/header.php");
-        require_once("views/Perfis/inserePerfil.php");
+        require_once("views/perfis/InserePerfil.php");
         require_once("views/footer.php");
         
     }
@@ -46,6 +46,7 @@ class PerfisController{
         
         // Pega o Id do novo perfil, para armazenar na tabela de usuário
         $result = $this -> PerfilModel -> ObtemConsulta();
+
         if( $result != false ){
             
             // Sucesso!
@@ -63,14 +64,14 @@ class PerfisController{
 
                 // Sucesso!
                 $usuarioId = $result;
-                $this -> ReportaSucesso('seu cadastro foi concluído com sucesso!','?c=m&a=i');
+                $this -> ReportaSucesso('seu cadastro foi concluído com sucesso!',null,'?c=m&a=sd');
 
             }else{
-                $this -> ReportaFalha('houve uma falha na tentativa de gravação do usuário para seu perfil!');
+                $this -> ReportaFalha('houve uma falha na tentativa de gravação do usuário para seu perfil!',null);
             }
 
         }else{
-            $this -> ReportaFalha('houve uma falha na tentativa de gravação de seu perfil!');
+            $this -> ReportaFalha('houve uma falha na tentativa de gravação de seu perfil!',null);
         }
 
 
@@ -108,7 +109,7 @@ class PerfisController{
         if( $this -> PerfilModel -> ObtemConsulta() != false ){            
             $this -> ReportaSucesso("perfil atualizado, com sucesso!",null,"?c=m&a=i");
         }else{
-            $this -> ReportaFalha('houve uma falha na tentativa de atualização de seu perfil!');
+            $this -> ReportaFalha('houve uma falha na tentativa de atualização de seu perfil!',null);
         }        
         
     }

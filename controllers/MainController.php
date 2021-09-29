@@ -25,6 +25,18 @@
                 $result = $this -> MainModel -> ObtemConsulta();
                 if( $result != false ){
                     $cadastroPerfil = $result -> fetch_assoc();
+
+                    if( $_SESSION['tipo_cadastro'] == 1 ){
+                        $this -> MainModel -> ListaPedidos(null);
+                    }else{
+                        $this -> MainModel -> ListaPedidos($_SESSION["id_perfil"]);
+                    }
+                    $result = $this -> MainModel -> ObtemConsulta();                    
+                    $arrayPedidos = array();
+                    while( $linha = $result -> fetch_assoc() ) {
+                        array_push( $arrayPedidos, $linha );
+                    }            
+            
                     require_once("views/header.php");
                     require_once("views/home.php");
                     require_once("views/footer.php");        

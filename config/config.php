@@ -50,6 +50,6 @@
     // Diversos
     $sisConfig['autoria'] = '2021 - Luiz Carlos Costa Rodrigues e Geraldo Samir Silveira Varriale, disciplina de LSP, ULBRA, Torres/RS';
     $sisConfig['tipos_de_cadastro'] = array("Comércio","ONG");
-    $sisConfig['versão'] = "0.1.0.3";
+    $sisConfig['versão'] = "0.1.3.4";
 
 ?>

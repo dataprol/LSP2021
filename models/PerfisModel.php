@@ -32,15 +32,15 @@ class PerfisModel{
 
     public function InserePerfil($arrayPerfil){
 
-        $sql = "INSERT INTO `tb_perfil`
+        $sql = "INSERT INTO tb_perfil
         (
-        `cnpj`,
-        `tipo_cadastro`,
-        `nome_razaosocial`,
-        `nome_fantasia`,
-        `email`,
-        `telefone`,
-        `endereco`
+        cnpj,
+        tipo_cadastro,
+        nome_razaosocial,
+        nome_fantasia,
+        email,
+        telefone,
+        endereco
         )
         VALUE(
         '" . $arrayPerfil['perfilCNPJ'] . "', 

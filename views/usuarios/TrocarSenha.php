@@ -1,7 +1,7 @@
     <link href="assets/css/change_password.css" rel="stylesheet">
 
     <?php
-    if( !isset($_SESSION["usuarioNomeLogin"]) and !isset($_SESSION["fk_id_perfil_usuario"]) ){
+    if( !isset($_SESSION["usuarioNomeLogin"]) and !isset($_SESSION["id_perfil"]) ){
         echo("<h1>Acesso proibido</h1>");
     }else{
     ?>

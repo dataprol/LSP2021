@@ -51,6 +51,25 @@
                 }
             break;
             
+            case 'p':
+                
+                require_once("controllers/PedidosController.php");
+                $PedidoCTRL = new PedidosController($sisConfig);
+                if( ! isset( $_GET['a'] ) ){
+                    $PedidoCTRL -> Index();
+                }
+                else
+                {
+                    switch( $_REQUEST['a'] ){
+                        case 'l': $PedidoCTRL -> ListaPedidos(); break;
+                        case 'i': $PedidoCTRL -> InserePedido(); break;
+                        case 'ia': $PedidoCTRL -> InserePedidoAction(); break;
+                        /* case 'u': $PedidoCTRL -> AtualizaPedido($_GET['id']); break;
+                        case 'ua': $PedidoCTRL -> AtualizaPedidoAction(); break; */
+                    }
+                }
+            break;
+
             case 'u':
         
                 require_once("controllers/UsuariosController.php");

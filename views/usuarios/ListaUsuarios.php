@@ -1,7 +1,3 @@
-<?php
-    global $diretorios;
-?>
-
 <div class="container-fluid">
 
     <h2>Lista de Usuários</h2>

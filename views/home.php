@@ -36,10 +36,32 @@
     <div class="row m-0 p-0">
         <div class="col col-sm m-1 p-3">
             <b>
-                Pedidos de Coleta:
+                <h4>
+                Recentes Pedidos de Coleta
+                </h4>
             </b>
-            <br>
-            <p class="text-secondary">Exibir, aqui, lista dos recentes pedidos de coleta postados</p>
+            <b>
+            <div class="row">
+                <div class="col col-sm-1">Código</div>
+                <div class="col col-sm-2">Descricao</div>
+                <div class="col col-sm-2">Prazo</div>
+            </div>
+            </b>
+            <hr>
+            <?php
+            foreach( $arrayPedidos as $pedido ){
+            ?>
+                <div class="row ">
+                    <div class="col col-sm-1 d-flex flex-sm-nowrap"><?= $pedido["id_pedido"] ?></div>
+                    <div class="col col-sm-2 d-flex flex-sm-nowrap"><?= $pedido["descricao"] ?></div>
+                    <div class="col col-sm-2 d-flex flex-sm-nowrap"><?= $pedido["dt_limite"] ?></div>
+                </div>
+                <hr>
+            <?php
+            }
+            ?>
+            
+                    
         </div>
     </div>
 
