@@ -21,10 +21,10 @@
     <div class="form-group">
         <label for="usuarioLogin">Nome de usuário:</label>
         <input type="text" class="form-control" name="usuarioLogin" id="usuarioLogin" 
-        placeholder="exemplo: alan_1945" pattern="[_0-9a-zA-Z]{4,50}" title="4 à 50 caracteres, somente aceita-se números, letras e sublinhados."
-        required>
+        placeholder="exemplo: alan_1945" pattern="[a-zA-Z_0-9]{6,50}" title="É permitido de 6 à 50 caracteres alfabéticos, numéricos e o sublinhado. É proibido espaços entre os caracteres."
+        required autofocus>
     </div>
-    <div class="form-group">
+<!--     <div class="form-group">
         <label for="usuarioSenha">Senha</label>
         <input type="password" name="usuarioSenha" id="usuarioSenha" class="form-control" 
         placeholder="Nova senha" required>
@@ -34,21 +34,27 @@
         <input type="password" name="senhaRepetidaUsuario" id="senhaRepetidaUsuario" class="form-control" 
         placeholder="Repita a senha" required>
     </div>
-    <div class="form-group">
-        <label for="usuarioNivel" <?php if( !verificaNivelAcesso(9) ){ echo("hidden"); }?> >Nível de acesso:</label>
-        <input type="number" min=0 max=9 class="form-control" name="usuarioNivel" id="usuarioNivel" 
-        placeholder="exemplo: 3" 
-        value=0 <?php if( !verificaNivelAcesso(9) ){ echo("hidden"); }?> >
+ -->    <div class="form-group">
+        <label for="usuarioNivel" <?php if( !verificaNivelAcesso("Administrativo") ){ echo("hidden"); }?> >Nível de acesso:</label>
+        <select class="form-control" name="usuarioNivel" id="usuarioNivel" 
+        required <?php if( !verificaNivelAcesso("Administrativo") ){ echo("hidden"); }?> >
+            <option value=""></option>
+            <?php
+                foreach ( _USUARIOS_LISTA_NIVEIS as $chave => $valor) {
+                    echo "<option value=$valor>$chave</option>";
+                }
+            ?>
+        </select>
     </div>
     <div class="form-group">
         <label for="usuarioEmail">Correio eletrônico:</label>
         <input type="email" class="form-control" name="usuarioEmail" id="usuarioEmail" 
-                placeholder="exemplo: alan@provedor_de_email.com" required>
+        placeholder="exemplo: alan@provedor_de_email.com" required>
     </div>
     <div class="form-group">
         <label for="usuarioTelefoneCelular">Telefone celular(com DDD):</label>
         <input type="tel" class="form-control" name="usuarioTelefoneCelular" id="usuarioTelefoneCelular" 
-                placeholder="exemplo: 151993988725" pattern="[0-9]{11}" title="11 dígitos, somente números" required>
+        placeholder="exemplo: 151993988725" pattern="[0-9]{11}" title="11 dígitos, somente números" required>
     </div>
     
         <!-- Campos ocultos -->
@@ -57,6 +63,10 @@
         hidden>
         
         <button type="submit" class="btn btn-success">Salvar</button>
+        &nbsp;&nbsp;
+        <a class="btn btn-danger" href="#" onclick="window.history.back();">
+            Voltar
+        </a>
 
     </form>
 

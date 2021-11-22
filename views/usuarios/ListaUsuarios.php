@@ -4,7 +4,8 @@
     <b>
     <div class="row">
         <div class="col col-sm-2">Login</div>
-        <div class="col col-sm-1">Telefone</div>
+        <div class="col col-sm-2">Nível</div>
+        <div class="col col-sm-2">Telefone</div>
         <div class="col col-sm-auto">Email</div>
     </div>
     </b>
@@ -16,7 +17,8 @@
             <div class="col col-sm-2 d-flex flex-sm-nowrap">
                 <?= $usuario["login"] ?>
             </div>
-            <div class="col col-sm-1 d-flex flex-sm-nowrap"><?= $usuario["telefoneCelular"] ?></div>
+            <div class="col col-sm-2 d-flex flex-sm-nowrap"><?= array_search($usuario["nivel"],_USUARIOS_LISTA_NIVEIS) ?></div>
+            <div class="col col-sm-2 d-flex flex-sm-nowrap"><?= $usuario["telefoneCelular"] ?></div>
             <div class="col col-sm-auto d-flex flex-sm-nowrap"><?= $usuario["email"] ?></div>
         </div>
         <div class="row">
@@ -24,7 +26,7 @@
                 
                 <?php
                 
-                if(verificaNivelAcesso(9)){ 
+                if( verificaNivelAcesso("Gerencial") ){ 
                 ?>
                     <a class="btn btn-sm btn-primary" href="?c=u&a=u&id=<?=$usuario['id_usuario']?>">
                         Editar
@@ -32,7 +34,7 @@
                 <?php 
                 }
     
-                if( verificaNivelAcesso(9) and $usuario['id_usuario'] != $_SESSION['id_usuario'] ){
+                if( verificaNivelAcesso("Administrativo") and $usuario['id_usuario'] != $_SESSION['id_usuario'] ){
                 ?>
                     <button type="button" class="btn btn-sm btn-danger" 
                     data-toggle="modal" 
@@ -45,7 +47,7 @@
                 <?php 
                 } 
                 
-                if( verificaNivelAcesso(5) and $usuario['id_usuario'] != $_SESSION['id_usuario'] ){ 
+                if( verificaNivelAcesso("Técnico") and $usuario['id_usuario'] != $_SESSION['id_usuario'] ){ 
                 ?>
                     <a class="btn btn-sm btn-warning" href="?c=u&a=r&id=<?=$usuario['id_usuario']?>" role="button">
                         Reiniciar senha
@@ -63,9 +65,11 @@
     }
     ?>
     
-    <center>
-    <a class="btn btn-success" href="?c=u&a=i">Adicionar</a>
-    </center>
+    <?php if( verificaNivelAcesso("Gerencial") ){ ?>    
+        <center>
+        <a class="btn btn-primary" href="?c=u&a=i">Adicionar</a>
+        </center>
+    <?php } ?>
 
     <!-- Janela Modal Exclusão -->
     <div id="modalExclusao" class="modal fade" role="dialog">

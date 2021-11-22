@@ -25,10 +25,6 @@
             </h5>
             
             <br><br>
-            
-            Experimente retornar à tela anterior e tentar novamente.
-
-            <br><br>
 
             <a class="btn btn-lg btn-primary" href="#" onclick="window.history.back();">
                Voltar

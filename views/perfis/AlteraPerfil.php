@@ -1,7 +1,3 @@
-<?php
-    global $diretorios;
-?>
-
 <div class="container">
         
     <h2>Atualização de Perfil</h2>
@@ -16,7 +12,8 @@
         <div class="form-group">
             <label for="perfilRazaoSocial">Razão Social:</label>
             <input type="text" class="form-control" name="perfilRazaoSocial" 
-            value="<?=$arrayPerfil['nome_razaosocial']?>">
+            value="<?=$arrayPerfil['nome_razaosocial']?>"
+            autofocus>
         </div>
         <div class="form-group">
             <label for="perfilRperfilNomeazaoSocial">Título ou Nome Fantasia:</label>
@@ -27,7 +24,7 @@
             <label for="perfilCNPJ">CNPJ:</label>
             <input type="num" class="form-control" name="perfilCNPJ" 
             placeholder="00.000.000/0000-00" pattern="[0-9]{14}" title="14 dígitos, somente números" 
-            required autofocus value=<?=$arrayPerfil['cnpj']?>>
+            required value=<?=$arrayPerfil['cnpj']?>>
         </div>
         <div class="form-group">
             <label for="perfilTipo">Tipo do perfil:</label>
@@ -35,7 +32,7 @@
                 <option value=""></option>
                 <?php
                 $Indice=0;
-                foreach ( $this -> sisConfig['tipos_de_cadastro'] as $tipo ) {
+                foreach ( _TIPOS_DE_CADASTRO as $tipo ) {
                     echo "<option value=$tipo";
                     if($Indice==$arrayPerfil['tipo_cadastro']){
                         echo " selected ";
@@ -64,7 +61,11 @@
             value="<?=$arrayPerfil['endereco']?>">
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+            &nbsp;&nbsp;
+            <a class="btn btn-danger" href="#" onclick="window.history.back();">
+                Voltar
+            </a>
         </div>
     </form>
     

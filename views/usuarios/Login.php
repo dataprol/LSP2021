@@ -3,7 +3,7 @@
         <form class="form-signin" action="?c=u&a=vl" method=POST name="formulario" id="formulario">
             
             <h2 class="h4 mb-3 font-weight-normal text-dark">
-                <b>Trabalho de LSP</b>
+                <b><?=_PROJETO_TITULO?></b>
             </h2>
     
             <h1 class="h3 mb-3 font-weight-normal text-dark">
@@ -45,7 +45,7 @@
 
             <a href="/">
                 <p class="mt-5 mb-3 text-info">
-                &copy; 2021, Website de LSP
+                &copy; 2021, <?=_PROJETO_TITULO?>
                 </p>
             </a>
         </form>

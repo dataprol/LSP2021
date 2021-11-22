@@ -10,7 +10,7 @@
     onsubmit="return Validar(this);" >
                 
         <h2 class="h4 mb-3 font-weight-normal text-dark">
-            <b>Trabalho de LSP</b>
+            <b><?=_PROJETO_TITULO?></b>
         </h2>
     
         <h1 class="h3 mb-3 font-weight-normal text-dark">

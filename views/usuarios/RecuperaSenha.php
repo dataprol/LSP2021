@@ -3,7 +3,7 @@
         <form class="form-signin" action="?c=u&a=fpa" method=POST name="formulario" id="formulario">
            
             <h2 class="h4 mb-3 font-weight-normal text-dark">
-                <b>Trabalho de LSP</b>
+                <b><?=_PROJETO_TITULO?></b>
             </h2>
     
             <h1 class="h3 mb-3 font-weight-normal text-dark">
@@ -21,7 +21,11 @@
 
             <a href="/">
                 <p class="mt-5 mb-3 text-info">
-                &copy; 2021, Website de LSP <br>Website de LSP
+                    &copy; <?= _PROJETO_COPYRIGHT ?>
+                    <br>
+                    <?= _PROJETO_TITULO ?>
+                    <br>
+                    Versão: <?= _PROJETO_VERSAO ?>
                 </p>
             </a>
         </form>

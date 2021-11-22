@@ -2,12 +2,12 @@
 <html lang="pt">
     <head>
 
-        <title>Login em Website de LSP</title>
+        <title>Login em <?=_PROJETO_TITULO?></title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Página de login">
-        <meta name="author" content=<?= $this -> sisConfig['autoria'] ?>>
+        <meta name="author" content=<?= _PROJETO_COPYRIGHT ?>>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>

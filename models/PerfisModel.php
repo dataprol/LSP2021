@@ -102,6 +102,42 @@ class PerfisModel{
 
     }
 
+    public function RemovePerfil($id_perfil){
+
+        $sql = "DELETE FROM tb_perfil 
+                WHERE id_perfil = $id_perfil ";
+
+        $this -> resultado = $this -> Conn-> query($sql);
+
+    }
+
+    public function ConsultaPedidosReservados($id_perfil){
+
+        $sql = "SELECT * FROM tb_pedido
+                WHERE 
+                    fk_id_perfil_pedido = $id_perfil 
+                    AND status = 1";
+
+        $this -> resultado = $this -> Conn-> query($sql);
+
+    }
+
+    public function consultaUsuarioLogin( $login ){
+
+        $sql = "SELECT * FROM tb_usuario WHERE login='" . $login . "'";
+        
+        $this -> resultado = $this -> Conn -> query( $sql );
+
+    }
+
+    public function consultaUsuarioEmail( $email ){
+        
+        $sql = "SELECT * FROM tb_usuario WHERE email='" . $email . "'";
+        
+        $this -> resultado = $this -> Conn -> query( $sql );
+
+    }
+
     public function ObtemConsulta(){
         return $this -> resultado;
     }

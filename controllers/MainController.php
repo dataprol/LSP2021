@@ -25,8 +25,8 @@
                 $result = $this -> MainModel -> ObtemConsulta();
                 if( $result != false ){
                     $cadastroPerfil = $result -> fetch_assoc();
-
-                    if( $_SESSION['tipo_cadastro'] == 1 ){
+                    $_SESSION['id_perfil'] = $cadastroPerfil['id_perfil'];
+                    if( $_SESSION['tipo_cadastro'] == _TIPO_ONG ){
                         $this -> MainModel -> ListaPedidos(null);
                     }else{
                         $this -> MainModel -> ListaPedidos($_SESSION["id_perfil"]);
@@ -56,12 +56,62 @@
 
         }
 
-        public function AcessoNegado(){
+        public function AcessoNegado($nivel){
             
-            $this -> ReportaFalha('acesso restrito a usuários específicos.','Acesso negado');
+            $this -> ReportaFalha('acesso restrito aos usuários com nível '.strtolower(array_search($nivel,_USUARIOS_LISTA_NIVEIS)).'.','Acesso negado');
 
         }
 
+        public function ReservarPedido( $pedidoId ){
+
+            if( !isset($_SESSION["usuarioNomeLogin"]) and !isset($_SESSION["id_perfil"]) ){
+                header("Location: index.php?c=m&a=l");exit;
+            }
+    
+            negarAcesso("Operacional");
+
+            $this -> MainModel -> ConsultaPedido($pedidoId);
+            if( $result = $this -> MainModel -> ObtemConsulta() ){
+                $aPedido = $result -> fetch_assoc();
+                if( $aPedido['status'] == 0 ){
+                    if( $aPedido['dt_limite'] <= date('Y-m-d H:i:s') ){
+                        $this -> ReportaFalha("data limite é menor que atual","Prazo Esgotado");
+                    }else{
+                        $this -> MainModel -> ReservarPedido($pedidoId);
+                        if( $this -> MainModel -> ObtemConsulta() != false ){
+                            $this -> ReportaSucesso("doação reservada, com sucesso!",null,"?c=m&a=i");
+                        }else{
+                            $this -> ReportaFalha(null,null);
+                        }                
+                    }
+                }else{
+                    $this -> ReportaFalha("a doação não está mais disponível.<br>Já foi ". 
+                            strtolower(array_search($aPedido["status"],_PEDIDOS_SITUACOES)).
+                            ".","Indisponível");
+                }
+            }else{
+                $this -> ReportaFalha(null,null);
+            }
+            
+        }
+    
+        public function DesistirPedido( $pedidoId ){
+    
+            if( !isset($_SESSION["usuarioNomeLogin"]) and !isset($_SESSION["id_perfil"]) ){
+                header("Location: index.php?c=m&a=l");exit;
+            }
+    
+            negarAcesso("Operacional");
+            
+            $this -> MainModel -> DesistirPedido($pedidoId);
+            if( $this -> MainModel -> ObtemConsulta() != false ){
+                $this -> ReportaSucesso("doação abandonada, com sucesso!",null,"?c=m&a=i");
+            }else{
+                $this -> ReportaFalha(null,null);
+            }
+    
+        }
+    
         public function ReportaFalha( $cMensagemDeErro, $cTituloDoErro ){
 
             require_once("views/header.php");

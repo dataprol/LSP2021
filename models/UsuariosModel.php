@@ -16,8 +16,7 @@ class usuariosModel{
 
     public function consultaUsuarioId( $id_usuario ){
         
-        $sql = "SELECT * FROM tb_usuario 
-                WHERE id_usuario='$id_usuario'";
+        $sql = "SELECT * FROM tb_usuario WHERE id_usuario='$id_usuario'";
         
         $this -> resultado = $this -> Conn -> query( $sql );
 
@@ -25,8 +24,7 @@ class usuariosModel{
 
     public function consultaUsuarioLogin( $login ){
 
-        $sql = "SELECT * FROM tb_usuario 
-                WHERE login='" . $login . "'";
+        $sql = "SELECT * FROM tb_usuario WHERE login='" . $login . "'";
         
         $this -> resultado = $this -> Conn -> query( $sql );
 
@@ -34,8 +32,7 @@ class usuariosModel{
 
     public function consultaUsuarioEmail( $email ){
         
-        $sql = "SELECT * FROM tb_usuario 
-                WHERE email='" . $email . "'";
+        $sql = "SELECT * FROM tb_usuario WHERE email='" . $email . "'";
         
         $this -> resultado = $this -> Conn -> query( $sql );
 

@@ -11,19 +11,20 @@
         <div class="form-group">
             <label for="perfilNome">Título ou Nome Fantasia:</label>
             <input type="text" class="form-control" name="perfilNome" 
-            placeholder="Restaurante Comida Na Mesa">
+            placeholder="Restaurante Comida Na Mesa"
+            autofocus>
             <label for="perfilRazaoSocial">Razão Social:</label>
             <input type="text" class="form-control" name="perfilRazaoSocial"
             placeholder="Empresa Nacional de Alimentos SA" required>
             <label for="perfilCNPJ">CNPJ:</label>
             <input type="num" class="form-control" name="perfilCNPJ" 
             placeholder="00.000.000/0000-00" pattern="[0-9]{14}" title="14 dígitos, somente números" 
-            required autofocus>
+            required>
             <label for="perfilTipo">Tipo do perfil:</label>
             <select class="form-control" name="perfilTipo" id="perfilTipo" required>
             <option value=""></option>
             <?php
-                foreach ( $this -> sisConfig['tipos_de_cadastro'] as $tipo ) {
+                foreach ( _TIPOS_DE_CADASTRO as $tipo ) {
                     echo "<option value=$tipo>$tipo</option>";
                 }
             ?>
@@ -47,16 +48,21 @@
         <div class="form-group">
             <label for="usuarioLogin">Nome de usuário:</label>
             <input type="text" class="form-control" name="usuarioLogin" id="usuarioLogin" 
+            placeholder="exemplo: alan_1945" pattern="[a-zA-Z_0-9]{6,50}" title="É permitido de 6 à 50 caracteres alfabéticos, numéricos e o sublinhado. É proibido espaços entre os caracteres."
             required>
-            <label for="usuarioSenha">Senha</label>
+<!--             <label for="usuarioSenha">Senha</label>
             <input type="password" name="usuarioSenha" id="usuarioSenha" class="form-control" 
             placeholder="Nova senha" required>
             <label for="senhaRepetidaUsuario">Repita a senha</label>
             <input type="password" name="senhaRepetidaUsuario" id="senhaRepetidaUsuario" class="form-control" 
             placeholder="Repita a senha" required>
-        </div>
+ -->        </div>
 
         <button type="submit" class="btn btn-success">Salvar</button>
+        &nbsp;&nbsp;
+        <a class="btn btn-danger" href="#" onclick="window.history.back();">
+            Voltar
+        </a>
     </form>
 
 </div>

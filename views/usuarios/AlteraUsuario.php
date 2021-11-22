@@ -17,18 +17,30 @@
                     value="<?=$arrayUsuarios['login']?>" disabled >
         </div>
         
-        <?php if( verificaNivelAcesso(9) ){ ?>        
+        <?php if( verificaNivelAcesso("Administrativo") ){ ?>        
         <div class="form-group">
             <label for="usuarioNivel">Nível de acesso:</label>
-            <input type="number" min=0 max=9 class="form-control" name="usuarioNivel" id="usuarioNivel" 
-                    placeholder="exemplo: 3"
-                    value="<?=$arrayUsuarios['nivel']?>">
+            <select class="form-control" name="usuarioNivel" id="usuarioNivel" 
+            required >
+                <option value=""></option>
+                <?php
+                    foreach( _USUARIOS_LISTA_NIVEIS as $chave => $valor) {
+                        echo "<option value=$valor";
+                        if( $valor == $arrayUsuarios['nivel'] ){
+                            echo " selected ";
+                        }
+                        echo ">$chave</option>";
+                    }    
+                ?>
+            </select>
+
         </div>
         <?php } ?>
         <div class="form-group">
             <label for="usuarioEmail">Correio eletrônico:</label>
             <input type="email" class="form-control" name="usuarioEmail" 
-                    value="<?=$arrayUsuarios['email']?>">
+                    value="<?=$arrayUsuarios['email']?>"
+                    autofocus>
         </div>
         <div class="form-group">
             <label for="usuarioTelefoneCelular">Telefone celular:</label>
@@ -48,6 +60,10 @@
 
         <div class="form-group">
             <button type="submit" class="btn btn-success">Salvar</button>
+            &nbsp;&nbsp;
+            <a class="btn btn-danger" href="#" onclick="window.history.back();">
+                Voltar
+            </a>
         </div>
 
     </form>

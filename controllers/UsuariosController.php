@@ -4,6 +4,7 @@ class UsuariosController{
         
     var $UsuarioModel;
     var $sisConfig;
+    var $mail;
 
     public function __construct($cfgsis){
 
@@ -123,7 +124,7 @@ class UsuariosController{
             header("Location: index.php?c=m&a=l");exit;
         }
 
-        negarAcesso(0);
+        negarAcesso("Operacional");
         
         $this -> UsuarioModel -> consultaUsuarioId( $id );
         $arrayUsuarios = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
@@ -153,25 +154,57 @@ class UsuariosController{
         $arrayUsuarios["senhaValidade"] = $validadeSenha -> format( "Y-m-d" );
         
         $this -> UsuarioModel -> atualizaSenhaUsuario( $arrayUsuarios );
-        if( $this -> UsuarioModel -> ObtemConsulta() ){
-            
-            // Para fins de teses, a nova senha aparece na tela 
-            // Quando possível, codificar para ser enviada por e-mail
-            $this -> ReportaSucesso( "sua nova senha é temporária e será:<br><br>
-            <b>$novaSenha</b><br><br>
-            Ela tem um prazo de 24h. Depois, ela será desativada.<br>
-            Troque-a, o quanto antes.", "Reinicio de Senha", "?c=m&a=sd" );
-            /* echo "<script>alert('Se tiver informado seu e-mail, corretamente, 
-                    e o mesmo estiver cadastrado, dentro de 5 minutos, 
-                    você receberá uma mensagem contendo instruções.');</script>"; */
-            return $novaSenha;
 
+        if( $this -> UsuarioModel -> ObtemConsulta() ){
+        
+            // Mensagem por e-mail:
+            require_once("email.php");
+            
+            // Prepara mensagem
+            $cEMailDestino = [$arrayUsuarios["email"], $arrayUsuarios["login"]];
+            $cEMailAssunto = "Recuperação de Senha para " . $arrayUsuarios["login"];
+            $cEMailTituloMensagem = "Recuperação de Senha";
+            $cTextoNovaSenha = '
+                <p>
+                    Usuário: <b>' . $arrayUsuarios["login"] . '</b><br>
+                    Senha provisória: <b>' . $novaSenha . '</b><br>
+                    <b>Validade: ' . $prazoDias * 24 . ' horas</b>
+                </p>';
+            $cEMailMensagem = '
+                <h1>' . $cEMailTituloMensagem . '</h1>
+                <h3>Uma nova senha temporária foi criada, para você recuperar seu acesso!</h3>
+                ' . $cTextoNovaSenha . '
+                <br>
+                <p>
+                    Para trocar a senha, acesse o website <b><a href="https://lsp.provisorio.ws">lsp.provisorio.ws</a></b>, 
+                    entre com sua senha provisória, clique na sua imagem, no canto superior direito da tela, e clique em <b>Trocar Senha</b>.
+                    <br>
+                    <b>Troque sua senha, o quanto antes, para evitar seu bloqueio.</b>
+                </p>
+                <br><br>
+                Mensageiro autônomo<br>
+                ' . _PROJETO_AUTORIA . '<br>
+                ' . _PROJETO_TITULO . '<br>
+                ' . _PROJETO_WEBSITELINK ;
+
+            // Envia
+            if( !EmailEnviar( $cEMailDestino, $cEMailAssunto, $cEMailTituloMensagem, $cEMailMensagem, $this -> sisConfig["email_servidor"] ) ){
+                
+                $this -> ReportaFalha(null,'Mensagem não enviada');
+                
+            }else{
+                
+                $this -> ReportaSucesso( "se tiver informado seu e-mail, corretamente, 
+                    e o mesmo estiver cadastrado, dentro de 5 minutos, 
+                    você receberá uma mensagem contendo instruções.", "Recuperação de Senha", "?c=m&a=sd" );
+
+            }
+                    
         }else{
 
             $this -> ReportaFalha(null,null);
 
         }
-
     }
 
     public function EsqueceuSenha(){
@@ -209,7 +242,7 @@ class UsuariosController{
             header("Location: index.php?c=m&a=l");exit;
         }
 
-        negarAcesso(0);
+        negarAcesso("Operacional");
         
         require_once("views/header.php");
         require_once("views/usuarios/InsereUsuario.php");
@@ -223,8 +256,14 @@ class UsuariosController{
             header("Location: index.php?c=m&a=l");exit;
         }
 
+        $novaSenha = $this -> GeraSenha( 8, true, true, true, true );
+        $prazoDias = 1;
+        $validadeSenha = new DateTime();
+        $prazoSenha = new DateInterval( "P" . $prazoDias . "D" );
+        $validadeSenha -> add( $prazoSenha );
+
         // Confere se login já está em uso
-        $this -> UsuarioModel -> consultaUsuarioLogin( $_POST["usuarioLogin"] );
+        $this -> UsuarioModel -> consultaUsuarioLogin( mb_convert_case( $_POST["usuarioLogin"],  MB_CASE_TITLE, 'UTF-8' ) );
         $arrayUsuarios = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
         if( !empty( $arrayUsuarios ) ){
 
@@ -234,7 +273,7 @@ class UsuariosController{
         }
 
         // Confere se e-mail já está em uso
-        $this -> UsuarioModel -> consultaUsuarioEmail( $_POST["usuarioEmail"] );
+        $this -> UsuarioModel -> consultaUsuarioEmail( strtolower($_POST["usuarioEmail"]) );
         $arrayUsuarios = $this -> UsuarioModel -> ObtemConsulta() -> fetch_assoc();
         if( !empty( $arrayUsuarios ) ){
 
@@ -244,10 +283,10 @@ class UsuariosController{
         }
 
         $arrayUsuarios["usuarioLogin"] = mb_convert_case( $_POST["usuarioLogin"],  MB_CASE_TITLE, 'UTF-8' );
-        $arrayUsuarios["usuarioEmail"] = $_POST["usuarioEmail"];
+        $arrayUsuarios["usuarioEmail"] = strtolower($_POST["usuarioEmail"]);
         $arrayUsuarios["usuarioTelefoneCelular"] = $_POST["usuarioTelefoneCelular"];
         $arrayUsuarios["usuarioNivel"] = $_POST["usuarioNivel"];
-        $arrayUsuarios["usuarioSenha"] = md5( $_POST["usuarioSenha"] );
+        $arrayUsuarios["usuarioSenha"] = md5( $novaSenha );
         $arrayUsuarios["perfilId"] = $_POST["perfilId"];
  
         $this -> UsuarioModel -> InsereUsuario( $arrayUsuarios );
@@ -256,7 +295,48 @@ class UsuariosController{
         
         if( $idUsuario > 0 ){
 
-            $this -> ReportaSucesso( "usuário cadastrado, com sucesso!", null, "?c=u&a=l" );
+            // Mensagem por e-mail:
+            require_once("email.php");
+            
+            // Prepara mensagem
+            $cEMailDestino = [$arrayUsuarios["usuarioEmail"], $arrayUsuarios["usuarioLogin"]];
+            $cEMailAssunto = "Cadastro do novo usuário " . $arrayUsuarios["usuarioLogin"];
+            $cEMailTituloMensagem = "Cadastro de Novo Usuário";
+            $cTextoNovaSenha = '
+                <p>
+                    Usuário: <b>' . $arrayUsuarios["usuarioLogin"] . '</b><br>
+                    Senha provisória: <b>' . $novaSenha . '</b><br>
+                    <b>Validade: ' . $prazoDias * 24 . ' horas</b>
+                </p>';
+            $cEMailMensagem = '
+                <h1>' . $cEMailTituloMensagem . '</h1>
+                <h3>Seu usuário de acesso foi criado, com sucesso!</h3>
+                ' . $cTextoNovaSenha . '
+                <br>
+                <p>
+                    <b>Troque sua senha, o quanto antes, para evitar seu bloqueio.</b>
+                    <br>
+                    Para trocar a senha, acesse o website <b>' . _PROJETO_WEBSITELINK . '</b>, 
+                    entre com sua senha provisória, clique na sua imagem, no canto superior direito da tela, e clique em <b>Trocar Senha</b>.
+                </p>
+                <br><br>
+                Mensageiro autônomo<br>
+                ' . _PROJETO_AUTORIA . '<br>
+                ' . _PROJETO_TITULO . '<br>
+                ' . _PROJETO_WEBSITELINK ;
+
+            // Envia
+            if( !EmailEnviar( $cEMailDestino, $cEMailAssunto, $cEMailTituloMensagem, $cEMailMensagem, $this -> sisConfig["email_servidor"] ) ){
+                
+                $this -> ReportaFalha(null,'Mensagem não enviada');
+                
+            }else{
+                
+                $this -> ReportaSucesso( "se tiver informado seu e-mail, corretamente, 
+                    dentro de 5 minutos, você receberá uma mensagem contendo 
+                    instruções.", "Usuário cadastrado, com sucesso!", "?c=m&a=sd" );
+
+            }
 
         }else{
 
@@ -272,7 +352,7 @@ class UsuariosController{
             header("Location: index.php?c=m&a=l");exit;
         }
 
-        negarAcesso(0);
+        negarAcesso("Operacional");
         
         $this -> UsuarioModel -> consultaUsuarioId( $id_usuario );
         $result = $this -> UsuarioModel -> ObtemConsulta();
@@ -319,21 +399,21 @@ class UsuariosController{
         $arrayUsuarios = array();
         while( $linha = $result -> fetch_assoc() ) {
             array_push( $arrayUsuarios, $linha );
-        }            
+        }
         
         require_once("views/header.php");
         require_once("views/usuarios/ListaUsuarios.php");
         require_once("views/footer.php");
         
-    }      
-  
+    }
+
     public function RemoveUsuario( $usuarioId ){
 
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
         }
 
-        negarAcesso(9);
+        negarAcesso("Administrativo");
         
         $this -> UsuarioModel -> RemoveUsuario($usuarioId);
         if( $this -> UsuarioModel -> ObtemConsulta() != false ){
@@ -392,7 +472,7 @@ class UsuariosController{
         // retorna a senha embaralhada com "str_shuffle" com o tamanho definido pela variável $tamanho
         return mb_substr( str_shuffle( $senha ), 0, $tamanho );
 
-      }
+    }
 
 }
 
