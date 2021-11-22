@@ -41,7 +41,7 @@
 <div class="container-fluid">
 
     <div class="m-3 p-2">
-        <div class="nowrap ml-2 mr-2" style="float:left;">
+        <div class="nowrap ml-2 mr-2">
             <b>
                 <?= _TIPOS_DE_CADASTRO[ $cadastroPerfil['tipo_cadastro'] ] ?>
                 <h3>
@@ -52,30 +52,6 @@
                 <?= strtoupper( $cadastroPerfil['nome_razaosocial']) ?>
             </b>
         </div>
-        <div class="nowrap ml-2 mt-3 mr-2" style="float:left;">
-            <i class="fa fa-solid fa-industry"></i>
-            CNPJ: <?= preg_replace(  '/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $cadastroPerfil['cnpj'] ) ?>
-            <br>
-            <i class="fa fa-solid fa-map"></i>
-            Endereço: <?= $cadastroPerfil['endereco'] ?>
-        </div>
-        <div class="nowrap ml-2 mt-3">
-            <i class="fa fa-solid fa-phone"></i>
-            Telefone: <?= preg_replace(  '/(\d{2})(\d*)(\d{3})(\d{3})/', '($1) $2-$3-$4', $cadastroPerfil['telefone'] ) ?>
-            <br>
-            <i class="fa fa-solid fa-envelope" aria-hidden="true"></i>
-            E-Mail: <?= $cadastroPerfil['email'] ?>
-        </div>
-        <div class="ml-4 mt-0 p-0">
-            <?php
-            if( verificaNivelAcesso("Gerencial") ){ ?>
-                <br>
-                <a href="?c=c&a=u&id=<?=$cadastroPerfil['id_perfil']?>">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    <b>Atualizar o perfil</b>
-                </a>
-            <?php } ?>
-        </div>
     </div>
     <div class="row m-0 p-0">
         <div class="col col-sm-12 sm-nowrap m-1 p-3">
@@ -83,7 +59,7 @@
                 <h4>
                 <?php 
                     if( $_SESSION['tipo_cadastro'] == _TIPO_ONG){ 
-                        echo "Doações Dispoíveis";
+                        echo "Doações Disponíveis";
                     }else{
                         echo "Sua Doações Disponíveis";
                     }
@@ -109,12 +85,18 @@
                     <div class="col col-sm-2 d-flex flex-sm-nowrap">
                         <?= strftime( _FMT_DATA_HORA, strtotime( $pedido["dt_limite"] ) ) ?>
                     </div>
-                    <div class="col col-sm-auto d-flex flex-sm-nowrap"><?= array_search($pedido["status"],_PEDIDOS_SITUACOES) ?></div>
+                    <div class="col col-sm-auto d-flex flex-sm-nowrap">
+                        <b>
+                            <?= array_search($pedido["status"],_PEDIDOS_SITUACOES) ?>
+                        </b>
+                    </div>
                     <div class="col col-sm-2 d-flex flex-sm-nowrap">
-                    <p>
-                    <?= $pedido["descricao"] ?>
-                    <br>
-                    <br>
+                        <p>
+                            <b>
+                                <?= $pedido["descricao"] ?>
+                                <br>
+                                <br>
+                            </b>
                     <?php                          
                     if( $_SESSION['tipo_cadastro'] == _TIPO_ONG and $pedido["status"] == 0 and verificaNivelAcesso("Administrativo") ){ ?>
                         <button type="button" class="btn btn-sm btn-success" 

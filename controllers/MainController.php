@@ -26,6 +26,7 @@
                 if( $result != false ){
                     $cadastroPerfil = $result -> fetch_assoc();
                     $_SESSION['id_perfil'] = $cadastroPerfil['id_perfil'];
+                    $_SESSION['endereco_perfil'] = $cadastroPerfil['endereco'];
                     if( $_SESSION['tipo_cadastro'] == _TIPO_ONG ){
                         $this -> MainModel -> ListaPedidos(null);
                     }else{
@@ -37,11 +38,16 @@
                         array_push( $arrayPedidos, $linha );
                     }            
             
-                    require_once("views/header.php");
-                    require_once("views/home.php");
-                    require_once("views/footer.php");        
+                    if( $_SESSION['tipo_cadastro'] == _TIPO_ONG ){ 
+                        require_once("views/header.php");
+                        require_once("views/home.php");
+                        require_once("views/footer.php");        
+                    }else{
+                        header("Location: index.php?c=p&a=l");exit;
+                    }
+                    
                 }else{
-                    $this -> ReportaFalha('houve algum problema na consulta do perfil do usuário!');
+                    $this -> ReportaFalha('houve algum problema na consulta do perfil do usuário!',null);
                 }
             }else{
                 $this -> ReportaFalha(null,null);

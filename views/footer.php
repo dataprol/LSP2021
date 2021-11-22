@@ -7,6 +7,8 @@
                 Alunos da disciplina de Laboratório de Simulação e Prototipagem 
                 na universidade ULBRA campus Torres - 2021/2
                 <br>
+                Brasil
+                <br>
                 <?= _PROJETO_TITULO ?>
                 <br>
                 Versão: <?= _PROJETO_VERSAO ?>

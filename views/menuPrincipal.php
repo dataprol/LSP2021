@@ -1,6 +1,6 @@
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
         
-        <div class="text-white m-2 p-0">
+        <div class="m-2 p-0">
             <h4>
             <?php if(_MODO_DE_TRABALHO=='dev'){?>
                 <font color=#aa0000>
@@ -25,7 +25,7 @@
                 <div class="navbar-nav mr-auto">
 
                     <div class="nav-item">
-                        <a class="nav-link active" href="?c=m&a=i" role="button" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link" href="?c=m&a=i" role="button" aria-haspopup="true" aria-expanded="false">
                             Início
                         </a>
                     </div>
@@ -43,7 +43,7 @@
                         </div>                            
                     <?php 
                     }
-                    if( $_SESSION['tipo_cadastro'] == _TIPO_COMERCIO ){ ?>
+                    /* if( $_SESSION['tipo_cadastro'] == _TIPO_COMERCIO ){ ?>
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsuarios" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Pedidos
@@ -53,7 +53,7 @@
                                 <a class="dropdown-item" href="?c=p&a=i">Adicionar</a>
                             </div>
                         </div>                            
-                    <?php } ?>
+                    <?php }  */?>
                     
                 </div>
                 <div class="navbar-nav justify-content-end">
@@ -62,7 +62,7 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php
     
-                            echo $_SESSION[ "usuarioNomeLogin" ];
+                            echo "<b>".$_SESSION[ "usuarioNomeLogin" ]."</b>";
                             echo '&nbsp;';
                             
                             $imageFile =  $this -> sisConfig['arquivos'] . "/usuarios/" . trim( $_SESSION['id_usuario'] ) . ".jpg";

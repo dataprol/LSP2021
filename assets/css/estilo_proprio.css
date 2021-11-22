@@ -1,15 +1,11 @@
 body{
-    background-color:rgb(66, 66, 66);
-    /* color: rgb(0, 0, 0); */
+    background-color:rgb(160, 160, 160);
 }
-/* nav{
-    background-color: rgb(33, 33, 187);
-} */
 section{
-    background-color: #fffbea;
+    background-color: #eeeeee;
 }
 footer{
     /* background-color: #910000; */
     text-align: center;
-    color: #ffffff;
+    color: #000000;
 }

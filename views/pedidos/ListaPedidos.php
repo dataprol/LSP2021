@@ -3,7 +3,7 @@
     <h2>Lista de Suas Doações</h2>
     <b>
     <div class="row">
-        <div class="col col-sm-1">Código</div>
+        <!-- <div class="col col-sm-1">Código</div> -->
         <div class="col col-sm-1">Situação</div>
         <div class="col col-sm-2">Descricao</div>
         <div class="col col-sm-2">Cadastrado</div>
@@ -15,34 +15,72 @@
     foreach( $arrayPedidos as $pedido ){
     ?>
         <div class="row ">
-            <div class="col col-sm-1 d-flex flex-sm-nowrap"><?= $pedido["id_pedido"] ?></div>
-            <div class="col col-sm-auto d-flex flex-sm-nowrap"><?= array_search($pedido["status"],_PEDIDOS_SITUACOES) ?></div>
-            <div class="col col-sm-2 d-flex flex-sm-nowrap"><?= $pedido["descricao"] ?></div>
+            <!-- <div class="col col-sm-1 d-flex flex-sm-nowrap"><?= $pedido["id_pedido"] ?></div> -->
+            <div class="col col-sm-auto d-flex flex-sm-nowrap
+                <?php
+                    if($pedido["status"]==0){
+                        echo "text-primary";
+                    }
+                    if($pedido["status"]==1){
+                        echo "text-success";
+                    }
+                    if($pedido["status"]==8){
+                        echo "text-danger";
+                    }
+                    if($pedido["status"]==9){
+                        echo "text-warning";
+                    }
+                ?>
+            ">
+                <b><?= array_search($pedido["status"],_PEDIDOS_SITUACOES) ?></b>
+            </div>
+            <div class="col col-sm-2 d-flex flex-sm-nowrap"><b><?= $pedido["descricao"] ?></b></div>
             <div class="col col-sm-2 d-flex flex-sm-nowrap"><?= strftime( _FMT_DATA_HORA, strtotime( $pedido["dt_cadastro"] ) ) ?></div>
             <div class="col col-sm-2 d-flex flex-sm-nowrap"><?= strftime( _FMT_DATA_HORA, strtotime( $pedido["dt_limite"] ) ) ?></div>
             <br>
         </div>
-        <?php 
-        if( $pedido["status"] == 1 ){
-        ?>
-            <div class="row ">
-                <div class="col col-sm-12 d-flex flex-sm-nowrap">
-                    <font color="gray">
-                        <b>
-                            <?= $pedido["nome_fantasia"] ?>
-                            <br>
-                            Endereço: <?= $pedido["endereco"] ?>
-                            <br>
-                            E-mail: <?= $pedido["email"] ?>
-                            <br>
-                            Telefone: <?= $pedido["telefone"] ?>
-                        </b>
-                    </font>
-                </div>
+        
+        <?php if( $pedido["status"] == 1 ){ ?>
+        
+        <div class="row text-success">
+            <div class="pl-3 m-1">
+                <i class="fa fa-solid fa-industry"></i>
+                    <b>ONG:</b>
+                        <?= $pedido["nome_fantasia"] ?> 
+                        <b>Razão Social:</b> 
+                            <?= $pedido["nome_razaosocial"] ?>
+                            <i class="fas fa-id-card"></i>
+                                <b>CNPJ:</b> 
+                                <a href="http://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=<?= $pedido["cnpj"] ?>" 
+                                target="_blank">
+                                    <?= preg_replace(  '/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $pedido['cnpj'] ) ?>
+                                </a>
             </div>
-        <?php
-        }
-        ?>
+            <div class="pl-3 m-1">
+                <i class="fa fa-solid fa-map"></i>
+                    <b>Endereço:</b>
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=<?= urlencode($pedido["endereco"]) ?>&destination=<?= urlencode($_SESSION['endereco_perfil']) ?>" target=_blank>
+                            <?= $pedido["endereco"] ?>
+                        </a>
+            </div>
+            <div class="pl-3 m-1">
+                <i class="fa fa-solid fa-envelope"></i> 
+                    <b>E-mail:</b>
+                        <a href="mailto:<?= $pedido["email"] ?>">
+                            <?= $pedido["email"] ?>
+                        </a>
+            </div>
+            <div class="pl-3 m-1">
+                <i class="fa fa-solid fa-phone"></i> 
+                    <b>Telefone:</b>
+                        <a href="tel:+55<?=$pedido["telefone"]?>">
+                            <?= $pedido["telefone"] ?>
+                        </a>
+            </div>
+        </div>
+        
+        <?php } ?>
+        
         <div class="row">
             <div class="col col-sm-auto">
                 
