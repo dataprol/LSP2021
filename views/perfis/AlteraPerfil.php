@@ -4,12 +4,6 @@
     <p>Altere as informações desejadas, no formulário abaixo, e clique no botão Salvar.</p>
     <form action="?c=c&a=ua" method=POST enctype='multipart/form-data'>
         <div class="form-group">
-            <label for="perfilId">Id:</label>
-            <input type="text" class="form-control" name="perfilId" 
-            value="<?=$id_perfil?>" 
-            readonly>
-        </div>
-        <div class="form-group">
             <label for="perfilRazaoSocial">Razão Social:</label>
             <input type="text" class="form-control" name="perfilRazaoSocial" 
             value="<?=$arrayPerfil['nome_razaosocial']?>"
@@ -60,6 +54,13 @@
             <input type="text" class="form-control" name="perfilEndereco" 
             value="<?=$arrayPerfil['endereco']?>">
         </div>
+        
+        <!-- Campos ocultos -->
+        <input type="text" class="form-control" name="perfilId" 
+            value="<?=$id_perfil?>" 
+            readonly hidden>
+
+        <!-- Botões -->
         <div class="form-group">
             <button type="submit" class="btn btn-success">Salvar</button>
             &nbsp;&nbsp;

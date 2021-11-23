@@ -126,16 +126,36 @@
 
                     <?php if( $_SESSION['tipo_cadastro'] == _TIPO_ONG){ ?>
                     <div class="col col-sm-3">
-                        <b><?= strtoupper($pedido["nome_razaosocial"]) ?></b>
-                        <br>
+                        <i class="fas fa-id-card"></i>
+                            <b>
+                                <?= strtoupper($pedido["nome_fantasia"]) ?>
+                            </b>
+                            <br>
+                            <!-- <b>Razão Social:</b> <?= strtoupper($pedido["nome_razaosocial"]) ?>
+                            <br> -->
+                            <b>CNPJ:</b> 
+                                <a href="http://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=<?= $pedido["cnpj"] ?>" 
+                                target="_blank">
+                                    <?= preg_replace(  '/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $pedido['cnpj'] ) ?>
+                                </a>
+                                <br>
                         <i class="fa fa-solid fa-map"></i>
-                        <?= $pedido["endereco"] ?>
-                        <br>
+                            <b></b>
+                            <a href="https://www.google.com/maps/dir/?api=1&origin=<?= urlencode($pedido["endereco"]) ?>&destination=<?= urlencode($_SESSION['endereco_perfil']) ?>" target=_blank>
+                                <?= $pedido["endereco"] ?>
+                            </a>
+                            <br>
                         <i class="fa fa-solid fa-phone"></i>
-                        <?= preg_replace(  '/(\d{2})(\d*)(\d{3})(\d{3})/', '($1) $2-$3-$4', $pedido["telefone"] )?>
-                        <br>
+                            <b></b>
+                            <a href="tel:+55<?=$pedido["telefone"]?>">
+                                <?= preg_replace(  '/(\d{2})(\d*)(\d{3})(\d{3})/', '($1) $2-$3-$4', $pedido["telefone"] )?>
+                            </a>
+                            <br>
                         <i class="fa fa-solid fa-envelope"></i>
-                        <?= $pedido["email"] ?>
+                            <b></b>
+                            <a href="mailto:<?= $pedido["email"] ?>">
+                                <?= $pedido["email"] ?>
+                            </a>
                     </div>
                     <?php } ?>
                     <?php if( $_SESSION['tipo_cadastro'] == _TIPO_ONG){ ?>

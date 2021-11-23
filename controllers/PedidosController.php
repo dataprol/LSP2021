@@ -67,7 +67,8 @@ class PedidosController{
         
         if( $idPedido > 0 ){
 
-            $this -> ReportaSucesso( "doação cadastrada, com sucesso!", null, "?c=p&a=l" );
+            //$this -> ReportaSucesso( "doação cadastrada, com sucesso!", null, "?c=p&a=l" );
+            header("Location: index.php?c=p&a=l");
 
         }else{
 
@@ -104,7 +105,8 @@ class PedidosController{
 
         $this -> PedidoModel -> AtualizaPedido($_POST);
         if( $this -> PedidoModel -> ObtemConsulta() != false ){            
-            $this -> ReportaSucesso("doação atualizada, com sucesso!",null,"?c=p&a=l");
+            //$this -> ReportaSucesso("doação atualizada, com sucesso!",null,"?c=p&a=l");
+            header("Location: index.php?c=p&a=l");
         }else{
             $this -> ReportaFalha('houve uma falha na tentativa de atualização da doação!',null);
         }        
@@ -127,7 +129,7 @@ class PedidosController{
             }else{
                 $this -> PedidoModel -> FinalizarPedido($pedidoId);
                 if( $this -> PedidoModel -> ObtemConsulta() != false ){
-                    $this -> ReportaSucesso("coleta finalizada, com sucesso!",null,"?c=p&a=l");
+                    $this -> ReportaSucesso("finalizou a coleta da doação, com sucesso!",null,"?c=p&a=l");
                 }else{
                     $this -> ReportaFalha(null,null);
                 }
@@ -156,7 +158,8 @@ class PedidosController{
             }else{
                 $this -> PedidoModel -> CancelarPedido($pedidoId);
                 if( $this -> PedidoModel -> ObtemConsulta() != false ){
-                    $this -> ReportaSucesso("doação cancelada, com sucesso!",null,"?c=p&a=l");
+                    //$this -> ReportaSucesso("doação cancelada, com sucesso!",null,"?c=p&a=l");
+                    header("Location: index.php?c=p&a=l");
                 }else{
                     $this -> ReportaFalha(null,null);
                 }
@@ -181,7 +184,8 @@ class PedidosController{
             if( $aPedido['status'] == 8 ){
                 $this -> PedidoModel -> RemovePedido($pedidoId);
                 if( $this -> PedidoModel -> ObtemConsulta() != false ){
-                    $this -> ReportaSucesso("doação removida, com sucesso!",null,"?c=p&a=l");
+                    //$this -> ReportaSucesso("doação removida, com sucesso!",null,"?c=p&a=l");
+                    header("Location: index.php?c=p&a=l");
                 }else{
                     $this -> ReportaFalha(null,null);
                 }                

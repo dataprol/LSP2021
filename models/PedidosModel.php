@@ -58,15 +58,15 @@ class PedidosModel{
 
     }
 
-    public function AtualizaPedido($arrayPedidos){
+    public function AtualizaPedido($arrayPedido){
 
         $sql = "UPDATE tb_pedido 
         SET 
-            dt_limite='" . $arrayPedidos['pedidoDataLimite'] . "', 
-            descricao='" . $arrayPedidos['pedidoDescricao'] . "',
+            dt_limite='" . $arrayPedido['pedidoDataLimite'] . "', 
+            descricao='" . $arrayPedido['pedidoDescricao'] . "',
             id_coleta=" . $arrayPedido['perfilId'] . "
         WHERE 
-            id_pedido=" . $arrayPedidos['pedidoId'] ;
+            id_pedido=" . $arrayPedido['pedidoId'] ;
 
         $this -> resultado = $this -> Conn -> query($sql);
     

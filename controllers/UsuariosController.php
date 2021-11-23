@@ -332,7 +332,7 @@ class UsuariosController{
                 
             }else{
                 
-                $this -> ReportaSucesso( "se tiver informado seu e-mail, corretamente, 
+                $this -> ReportaSucesso( "se tiver informado o endereço de e-mail, corretamente, 
                     dentro de 5 minutos, você receberá uma mensagem contendo 
                     instruções.", "Usuário cadastrado, com sucesso!", "?c=m&a=sd" );
 
@@ -379,7 +379,8 @@ class UsuariosController{
         
         $this -> UsuarioModel -> AtualizaUsuario($arrayUsuarios);
         if( $this -> UsuarioModel -> ObtemConsulta() != false ){
-            $this -> ReportaSucesso('seu usuário de acesso foi atualizado, com sucesso!',null,'?c=u&a=l');
+            //$this -> ReportaSucesso('seu usuário de acesso foi atualizado, com sucesso!',null,'?c=u&a=l');
+            header("Location: index.php?c=u&a=l");
         }else{
             $this -> ReportaFalha('houve algum problema na tentativa de atualizar seu usuário de acesso!');
         }        

@@ -44,12 +44,12 @@
         
         <div class="row text-success">
             <div class="pl-3 m-1">
-                <i class="fa fa-solid fa-industry"></i>
-                    <b>ONG:</b>
+                <i class="fas fa-id-card"></i>
+                    <b>Quem reservou:</b>
                         <?= $pedido["nome_fantasia"] ?> 
-                        <b>Razão Social:</b> 
-                            <?= $pedido["nome_razaosocial"] ?>
-                            <i class="fas fa-id-card"></i>
+                        <!-- <b>Razão Social:</b> 
+                            <?= $pedido["nome_razaosocial"] ?> -->
+                            
                                 <b>CNPJ:</b> 
                                 <a href="http://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=<?= $pedido["cnpj"] ?>" 
                                 target="_blank">
@@ -58,21 +58,21 @@
             </div>
             <div class="pl-3 m-1">
                 <i class="fa fa-solid fa-map"></i>
-                    <b>Endereço:</b>
+                    <b></b>
                         <a href="https://www.google.com/maps/dir/?api=1&origin=<?= urlencode($pedido["endereco"]) ?>&destination=<?= urlencode($_SESSION['endereco_perfil']) ?>" target=_blank>
                             <?= $pedido["endereco"] ?>
                         </a>
             </div>
             <div class="pl-3 m-1">
                 <i class="fa fa-solid fa-envelope"></i> 
-                    <b>E-mail:</b>
+                    <b></b>
                         <a href="mailto:<?= $pedido["email"] ?>">
                             <?= $pedido["email"] ?>
                         </a>
             </div>
             <div class="pl-3 m-1">
                 <i class="fa fa-solid fa-phone"></i> 
-                    <b>Telefone:</b>
+                    <b></b>
                         <a href="tel:+55<?=$pedido["telefone"]?>">
                             <?= $pedido["telefone"] ?>
                         </a>

@@ -28,6 +28,11 @@
         value=<?=$arrayPedido['id_pedido']?>
         hidden>
         
+        <input type="number" class="form-control" name="perfilId" id="perfilId" 
+        value=<?=$arrayPedido['fk_id_perfil_pedido']?>
+        hidden>
+        
+        <!-- Botões -->
         <button type="submit" class="btn btn-success">Salvar</button>
         &nbsp;&nbsp;
         <a class="btn btn-danger" href="#" onclick="window.history.back();">

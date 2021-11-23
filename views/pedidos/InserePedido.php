@@ -26,6 +26,7 @@
         value=<?=$_SESSION['id_perfil']?>
         hidden>
         
+        <!-- Botões -->
         <button type="submit" class="btn btn-success">Salvar</button>
         &nbsp;&nbsp;
         <a class="btn btn-danger" href="#" onclick="window.history.back();">
