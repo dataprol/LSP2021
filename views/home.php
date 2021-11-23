@@ -69,11 +69,11 @@
             <br>
             <b>
             <div class="row">
-                <div class="col col-sm-2">Prazo</div>
+                <div class="col col-sm-2" title="Prazo limite para a coleta da doação">Prazo</div>
                 <div class="col col-sm-1">Situação</div>
                 <div class="col col-sm-2">Descrição</div>
                 <?php if( $_SESSION['tipo_cadastro'] == _TIPO_ONG){ ?>
-                    <div class="col col-sm-3">Onde</div>
+                    <div class="col col-sm-3" title="Local onde deverá coletar a doação">Onde</div>
                 <?php } ?>
             </div>
             </b>
@@ -125,7 +125,7 @@
                 </div>
 
                     <?php if( $_SESSION['tipo_cadastro'] == _TIPO_ONG){ ?>
-                    <div class="col col-sm-3">
+                    <div class="col col-sm-3" title="Comércio que disponibilizou essa a doação.">
                         <i class="fas fa-id-card"></i>
                             <b>
                                 <?= strtoupper($pedido["nome_fantasia"]) ?>

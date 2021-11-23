@@ -77,6 +77,5 @@
                                         "Reservada"=>1,
                                         "Cancelada"=>8,
                                         "Coletada"=>9) );
-    define( "_GOOGLE_API_KEY", "AIzaSyCgjttK9hotGBFFlF87V2k-Gn3tuqji_2A" );
 
 ?>
