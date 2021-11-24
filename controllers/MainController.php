@@ -86,6 +86,7 @@
                         $this -> MainModel -> ReservarPedido($pedidoId);
                         if( $this -> MainModel -> ObtemConsulta() != false ){
                             $this -> ReportaSucesso("doação reservada, com sucesso!",null,"?c=m&a=i");
+                            //header("Location: index.php?c=m&a=i");
                         }else{
                             $this -> ReportaFalha(null,null);
                         }                
@@ -111,7 +112,8 @@
             
             $this -> MainModel -> DesistirPedido($pedidoId);
             if( $this -> MainModel -> ObtemConsulta() != false ){
-                $this -> ReportaSucesso("doação abandonada, com sucesso!",null,"?c=m&a=i");
+                //$this -> ReportaSucesso("doação abandonada, com sucesso!",null,"?c=m&a=i");
+                header("Location: index.php?c=m&a=i");
             }else{
                 $this -> ReportaFalha(null,null);
             }
