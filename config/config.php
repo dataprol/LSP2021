@@ -60,7 +60,7 @@
 
     // Cria as constantes gerais do sistema
     define( "_PROJETO_TITULO", "Prato Solidário" );
-    define( "_PROJETO_VERSAO", "0.1.4.3" );
+    define( "_PROJETO_VERSAO", "0.1.5.1" );
     define( "_PROJETO_AUTORIA", "Geraldo Samir Silveira Varriale e Luiz Carlos Costa Rodrigues" );
     define( "_PROJETO_COPYRIGHT", "2021 - Geraldo Samir Silveira Varriale e Luiz Carlos Costa Rodrigues" );
     define( "_PROJETO_WEBSITELINK", '<a href="https://lsp.provisorio.ws/">lsp.provisorio.ws</a>');
