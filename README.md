@@ -5,3 +5,15 @@ Trata-se de um projeto de sistema web para interligar Organizações não Govern
 
 # Versão
 0.1.5.1
+
+# Licença
+**MIT**
+
+# Autores
+**Geraldo Samir Silveira Varriale**
+geraldovarriale@rede.ulbra.br
+linkedin.com/in/geraldovarriale
+
+**Luiz Carlos Costa Rodrigues**
+lccr@rede.ulbra.br
+linkedin.com/in/dataprol
