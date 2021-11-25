@@ -144,8 +144,54 @@
     }
     ?>
     
+
+    <!-- Paginação -->
+    <br>
+        Página <?=$nPagina?> de <?=$nTotalPaginas?>
+    <br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <?php
+            if($nTotalPaginas > 1){
+            ?>
+                <li class="page-item
+                <?php
+                if($nPagina==1){
+                    echo " disabled";
+                }
+                ?>               
+                "><a class="page-link" href="?c=p&a=l&pag=<?= $nPagina - 1 ?>">Anterior</a></li>
+            <?php
+            }
+            for ($nContagem=1; $nContagem <= $nTotalPaginas; $nContagem++) { 
+            ?>
+                <li class="page-item 
+                <?php
+                if($nContagem==$nPagina){
+                    echo " active";
+                }
+                ?>
+                "><a class="page-link" href="?c=p&a=l&pag=<?= $nContagem ?>"><?= $nContagem ?></a></li>
+            <?php
+            }
+            if($nTotalPaginas > 1){
+            ?>
+                <li class="page-item
+                <?php
+                if($nPagina==$nTotalPaginas){
+                    echo " disabled";
+                }
+                ?>               
+                "><a class="page-link" href="?c=p&a=l&pag=<?=$nPagina + 1?>">Próximo</a></li>
+            <?php
+            }
+            ?>
+        </ul>
+    </nav>
+
+    
     <center>
-    <a class="btn btn-primary" href="?c=p&a=i">Adicionar</a>
+        <a class="btn btn-primary" href="?c=p&a=i">Adicionar</a>
     </center>
 
     <!-- Janela Modal Aceitação -->

@@ -25,12 +25,32 @@
                 $result = $this -> MainModel -> ObtemConsulta();
                 if( $result != false ){
                     $cadastroPerfil = $result -> fetch_assoc();
-                    $_SESSION['id_perfil'] = $cadastroPerfil['id_perfil'];
                     $_SESSION['endereco_perfil'] = $cadastroPerfil['endereco'];
+
+                    // Paginação
+                    $nItensPorPagina = 2;
                     if( $_SESSION['tipo_cadastro'] == _TIPO_ONG ){
-                        $this -> MainModel -> ListaPedidos(null);
+                        $this -> MainModel -> ContaPedidos(null);
                     }else{
-                        $this -> MainModel -> ListaPedidos($_SESSION["id_perfil"]);
+                        $this -> MainModel -> ContaPedidos($_SESSION["id_perfil"]);
+                    }
+                    $linha = $this -> MainModel -> ObtemConsulta() -> fetch_assoc();
+                    $nTotalItens = $linha["total_linhas"];
+                    $nTotalPaginas = ceil( $nTotalItens / $nItensPorPagina );
+                    if( !isset($_GET["pag"]) or $_GET["pag"] < 1 ){
+                        $nPagina = 1;
+                    }else{
+                        $nPagina = $_GET['pag'];
+                    }
+                    if( $nPagina > $nTotalPaginas ){
+                        $nPagina = $nTotalPaginas;
+                    }
+
+                    // Listagem
+                    if( $_SESSION['tipo_cadastro'] == _TIPO_ONG ){
+                        $this -> MainModel -> ListaPedidos(null,$nItensPorPagina*($nPagina-1),$nItensPorPagina);
+                    }else{
+                        $this -> MainModel -> ListaPedidos($_SESSION["id_perfil"],$nItensPorPagina*($nPagina-1),$nItensPorPagina);
                     }
                     $result = $this -> MainModel -> ObtemConsulta();                    
                     $arrayPedidos = array();
@@ -99,9 +119,9 @@
             }else{
                 $this -> ReportaFalha(null,null);
             }
-            
+
         }
-    
+
         public function DesistirPedido( $pedidoId ){
     
             if( !isset($_SESSION["usuarioNomeLogin"]) and !isset($_SESSION["id_perfil"]) ){

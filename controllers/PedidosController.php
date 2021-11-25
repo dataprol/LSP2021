@@ -27,8 +27,24 @@ class PedidosController{
         if( !isset($_SESSION["usuarioNomeLogin"]) ){
             header("Location: index.php?c=m&a=l");exit;
         }
+        
+        // Paginação
+        $nItensPorPagina = 5;
+        $this -> PedidoModel -> ContaPedidos($_SESSION["id_perfil"]);
+        $linha = $this -> PedidoModel -> ObtemConsulta() -> fetch_assoc();
+        $nTotalItens = $linha["total_linhas"];
+        $nTotalPaginas = ceil( $nTotalItens / $nItensPorPagina );
+        if( !isset($_GET["pag"]) or $_GET["pag"] < 1 ){
+            $nPagina = 1;
+        }else{
+            $nPagina = $_GET['pag'];
+        }
+        if( $nPagina > $nTotalPaginas ){
+            $nPagina = $nTotalPaginas;
+        }
 
-        $this -> PedidoModel -> ListaPedidos($_SESSION["id_perfil"]);
+        // Listagem
+        $this -> PedidoModel -> ListaPedidos($_SESSION["id_perfil"],$nItensPorPagina*($nPagina-1),$nItensPorPagina);
 
         $result = $this -> PedidoModel -> ObtemConsulta();
         

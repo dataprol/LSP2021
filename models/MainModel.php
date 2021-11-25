@@ -33,7 +33,29 @@ class MainModel{
 
     }
 
-    public function ListaPedidos($perfilId){
+    public function ContaPedidos($perfilId){
+        
+        $select = "SELECT COUNT(*) as total_linhas FROM tb_pedido";
+        $where = "WHERE ";
+
+        if( $perfilId != null ){
+            $where .= "fk_id_perfil_pedido = $perfilId";
+        }else{
+            $select .= ", tb_perfil";
+            $where .= "fk_id_perfil_pedido = id_perfil";
+        }
+        if( $_SESSION['tipo_cadastro'] == _TIPO_ONG ){
+            $where .= " and (status = 0 or id_coleta = " . $_SESSION["id_perfil"] . ")";
+        }
+        $where .= " and unix_timestamp(STR_TO_DATE(dt_limite, '%Y-%m-%d %H:%i:%s')) > " . time();
+
+        $sql = "$select $where ;";
+
+        $this -> resultado = $this -> Conn -> query( $sql );
+
+    }
+
+    public function ListaPedidos($perfilId,$nInicio,$nTotalItens){
         
         $select = "SELECT * FROM tb_pedido";
         $where = "WHERE ";
@@ -41,8 +63,8 @@ class MainModel{
         if( $perfilId != null ){
             $where .= "fk_id_perfil_pedido = $perfilId";
         }else{
-            $where .= "fk_id_perfil_pedido = id_perfil";
             $select .= ", tb_perfil";
+            $where .= "fk_id_perfil_pedido = id_perfil";
         }
         if( $_SESSION['tipo_cadastro'] == _TIPO_ONG ){
             $where .= " and (status = 0 or id_coleta = ".$_SESSION["id_perfil"].")";
@@ -51,8 +73,9 @@ class MainModel{
 
         $sql = "$select 
                 $where 
-                ORDER BY dt_limite
-                LIMIT 25";
+                ORDER BY dt_limite 
+                LIMIT $nInicio, $nTotalItens 
+                ;";
 
         $this -> resultado = $this -> Conn -> query( $sql );
 

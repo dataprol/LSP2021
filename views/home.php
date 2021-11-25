@@ -162,7 +162,7 @@
                         <!-- <a class="btn btn-primary" onClick="obtemGeolocalizacao();">
                             Atualizar Rota
                         </a> -->
-                        <iframe width="400" height="300" data-destino="<?= $pedido["endereco"] ?>"
+                        <iframe width="320" height="220" data-destino="<?= $pedido["endereco"] ?>"
                         frameborder="0" style="border:0" name="mapaRota" id="mapaRota" 
                         src="https://www.google.com/maps/embed/v1/directions?key=<?= _GOOGLE_API_KEY ?>
                         &origin=<?= $cadastroPerfil["endereco"] ?>
@@ -184,6 +184,51 @@
 
         </div>
     </div>
+
+    <!-- Paginação -->
+    <br>
+        Página <?=$nPagina?> de <?=$nTotalPaginas?>
+    <br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            
+            <?php
+            if($nTotalPaginas > 1){
+            ?>
+                <li class="page-item
+                <?php
+                if($nPagina==1){
+                    echo " disabled";
+                }
+                ?>               
+                "><a class="page-link" href="?c=m&a=i&pag=<?= $nPagina - 1 ?>">Anterior</a></li>
+            <?php
+            }
+            for ($nContagem=1; $nContagem <= $nTotalPaginas; $nContagem++) { 
+            ?>
+                <li class="page-item 
+                <?php
+                if($nContagem==$nPagina){
+                    echo " active";
+                }
+                ?>
+                "><a class="page-link" href="?c=m&a=i&pag=<?= $nContagem ?>"><?= $nContagem ?></a></li>
+            <?php
+            }
+            if($nTotalPaginas > 1){
+            ?>
+                <li class="page-item
+                <?php
+                if($nPagina==$nTotalPaginas){
+                    echo " disabled";
+                }
+                ?>               
+                "><a class="page-link" href="?c=m&a=i&pag=<?=$nPagina + 1?>">Próximo</a></li>
+            <?php
+            }
+            ?>
+        </ul>
+    </nav>
 
 
     <!-- Janela Modal Aceitação -->

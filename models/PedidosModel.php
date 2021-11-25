@@ -22,12 +22,20 @@ class PedidosModel{
 
     }
 
-    public function ListaPedidos($perfilId){
+    public function ContaPedidos($perfilId){
+        
+        $sql = "SELECT COUNT(*) as total_linhas FROM tb_pedido
+                WHERE fk_id_perfil_pedido = $perfilId";
+        $this -> resultado = $this -> Conn -> query( $sql );
+
+    }
+
+    public function ListaPedidos($perfilId,$nInicio,$nTotalItens){
         
         $sql = "SELECT * FROM tb_pedido, tb_perfil 
                 WHERE fk_id_perfil_pedido = $perfilId AND tb_perfil.id_perfil = tb_pedido.id_coleta     
                 ORDER BY dt_cadastro 
-                LIMIT 25";
+                LIMIT $nInicio, $nTotalItens";
         $this -> resultado = $this -> Conn -> query( $sql );
 
     }
